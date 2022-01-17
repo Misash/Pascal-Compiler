@@ -62,7 +62,11 @@ enum Tag {
     FOR ,
     NIL ,
     RECORD ,
-    TYPE
+    TYPE ,
+    STRING ,
+    INTEGER ,
+    ID ,
+    FLOAT
 };
 
 
