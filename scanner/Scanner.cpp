@@ -15,6 +15,7 @@ public:
 
 //    Error* error ;
 
+
     string fileDir = "../test/main.pas";
     ifstream file;
 
@@ -29,66 +30,8 @@ public:
         file.open(fileDir,ios::in);
         file.seekg(0,ios::beg);
 
-        //operators
-        reserve(EXPONENT,"^");
-        reserve(PLUS,"+");
-        reserve(MINUS,"-");
-        reserve(DIVIDE,"/");
-        reserve(TIMES,"*");
-        reserve(ASSIGN,":=");
-        reserve(EQ,"=");
-        reserve(NE,"<>");
-        reserve(LT,"<");
-        reserve(GT,">");
-        reserve(LE,"<=");
-        reserve(GE,">=");
-        reserve(AND,"and");
-        reserve(OR,"or");
-        reserve(NOT,"not");
-        reserve(DIV,"div");
-        reserve(MOD,"mod");
-        reserve(IN,"in");
-        //delimiters
-        reserve(COMMA,",");
-        reserve(SEMICOLON,";");
-        reserve(COLON,":");
-        reserve(OPEN_PAREN,"(");
-        reserve(CLOSE_PAREN,")");
-        reserve(OPEN_BRACKET,"[");
-        reserve(CLOSE_BRACKET,"]");
-        //keywords
-        reserve(ARRAY,"array");
-        reserve(DOWNTO,"downto");
-        reserve(FUNCTION,"function");
-        reserve(OF,"of");
-        reserve(REPEAT,"repeat");
-        reserve(UNTIL,"until");
-        reserve(BEGIN,"begin");
-        reserve(ELSE,"else");
-        reserve(GOTO,"goto");
-        reserve(PACKED,"packed");
-        reserve(SET,"set");
-        reserve(VAR,"var");
-        reserve(CASE,"case");
-        reserve(END,"end");
-        reserve(IF,"if");
-        reserve(THEN,"then");
-        reserve(WHILE,"while");
-        reserve(CONST,"const");
-        reserve(FILE_,"file");
-        reserve(LABEL,"label");
-        reserve(PROGRAM,"program");
-        reserve(TO,"to");
-        reserve(WITH,"with");
-        reserve(DO,"do");
-        reserve(FOR,"for");
-        reserve(RECORD,"record");
-        reserve(TYPE,"TYPE");
-        reserve(NIL,"nil");
+
     }
-
-
-
 
 
     void reserve(int key,string value){
@@ -187,6 +130,8 @@ public:
             if(it->second == key) return it->first;
     }
 
+
+
     string get_type(int type){
         return Tag_Name(type);
     }
@@ -224,11 +169,12 @@ public:
            peek == '>' || peek == ',' || peek == ';' ||
            peek == '(' || peek == ')' || peek == '[' ||
            peek == ']' || peek == ':'){
-            return get_operator_and_delimiter();
+//            return get_operator_and_delimiter();
         }
 
 
         //read number
+
 
 
 
@@ -257,9 +203,25 @@ int main(){
 
     Scanner lexer;
 
-    lexer.scan();
+//    lexer.scan();
 
-    
+//    cout<<endl<<ENUM_TO_STR(1);
 
+    string x = tag_name[2];
+
+//    std::cout << "Enum type: " <<  tag_type::PLUS<< std::endl;
+//    std::cout << "Name name: " << x << std::endl;
+//    std::cout << "Name value: " << tag_value[tag_type::PLUS] << std::endl;
+//    std::cout << "Name type: " << tag_value[tag_type::PLUS] << std::endl;
+    std::cout << "Name type: " << getType("-")<< std::endl;
+//
+
+//    for (int i = 0; i < 57; ++i) {
+//        cout<<"\nX("<<Tag_Name(i)<<" ,\""<< Tag_Name(i)<<"\" , \""<<lexer.words[i]<<"\") \\";
+//    }
+
+//    for (int i = 0; i < 57; ++i) {
+//        cout<<"\nX("<<Tag_Name(i)<<" ,\""<< Tag_Name(i)<<"\" , \""<<lexer.words[i]<<"\") \\";
+//    }
 
 }
