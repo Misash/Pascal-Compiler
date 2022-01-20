@@ -135,18 +135,23 @@ public:
         return (int)c >= 48 && (int)c <=57;
     }
 
-    bool isAlpha(char c){
+    bool isLetter(char c){
         return ((int)c >= 65 && (int)c <=90) || ((int)c >= 97 && (int)c <=122) ;
     }
 
-    Token createToken(int type , string value){
-        Token token(type , value);
-        return token;
+    bool isKeyword(string tagVal){
+        int tagType = getTypeTag(tagVal);
+        return tagType >=AND && tagType <=FLOAT;
+    }
+
+    Token* createToken(int type , string value){
+        Token* tkn = new Token(type , value);
+        return tkn;
     }
 
 
 
-    Token get_operator_and_delimiter(){
+    Token* get_operator_and_delimiter(){
         Token *token_ptr = nullptr;
         string tokenValue = "";
 
@@ -158,10 +163,10 @@ public:
             tokenValue += peek;
             token_ptr = new Token(getTypeTag(tokenValue), tokenValue);
         }
-        return *token_ptr;
+        return token_ptr;
     }
 
-    Token get_Number(){
+    Token* get_Number(){
         string num = "";
         do{
             num += peek;
@@ -178,9 +183,27 @@ public:
         return createToken(FLOAT,num);
     }
 
+    Token* get_KeyWord_or_ID(){
+        string name;
+        do{
+            name += peek;
+            get_char();
+        }while(isLetter(peek) || isNumberic(peek));
+
+        if(peek == '@' || peek == '#' || peek == '%' || peek == '_' || peek == '&'){
+            cout<<"\nWARNING: invalid simbol at line "<<line<<"\n";
+            return 0;
+        }
+
+        if(isKeyword(name))
+            return createToken(getTypeTag(name),name);
+        else
+            return createToken(ID,name);
+    }
 
 
-    Token scan() {
+
+    Token* scan() {
 
         //skip comment and whitespace
         skip();
@@ -197,9 +220,8 @@ public:
         //read number
         if(isNumberic(peek)) return get_Number();
 
-
-
-
+        //read keyword or ID token
+        if(isLetter(peek)) return get_KeyWord_or_ID();
 
 
 
@@ -229,15 +251,15 @@ int main(){
 
     Scanner lexer;
 
-    Token t = lexer.scan();
+    Token* t = lexer.scan();
 
 
-    cout << lexer.line << "| type: " <<  getNameTag(t.type) <<"  ,  val: " << t.value;
-
-
+    cout << lexer.line << "| type: " <<  getNameTag(t->type) <<"  ,  val: " << t->value;
 
 
 
+//    cout<<lexer.isKeyword("for");
+//    cout<<AND<<" "<<FLOAT;
 
 
 

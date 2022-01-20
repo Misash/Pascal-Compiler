@@ -16,6 +16,9 @@ int main()
 
     char c = '/';
 
+    string tagVal = ""  ;
+    tagVal += c;
 
-    cout<<isNumber(c);
+
+    cout<<tagVal;
 }

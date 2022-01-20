@@ -92,12 +92,6 @@ X(LT ,"LT" , "<") \
 X(GT ,"GT" , ">") \
 X(LE ,"LE" , "<=") \
 X(GE ,"GE" , ">=") \
-X(AND ,"AND" , "and") \
-X(OR ,"OR" , "or") \
-X(NOT ,"NOT" , "not") \
-X(DIV ,"DIV" , "div") \
-X(MOD ,"MOD" , "mod") \
-X(IN ,"IN" , "in") \
 X(COMMA ,"COMMA" , ",") \
 X(SEMICOLON ,"SEMICOLON" , ";") \
 X(COLON ,"COLON" , ":") \
@@ -105,6 +99,12 @@ X(OPEN_PAREN ,"OPEN_PAREN" , "(") \
 X(CLOSE_PAREN ,"CLOSE_PAREN" , ")") \
 X(OPEN_BRACKET ,"OPEN_BRACKET" , "[") \
 X(CLOSE_BRACKET ,"CLOSE_BRACKET" , "]") \
+X(AND ,"AND" , "and") \
+X(OR ,"OR" , "or") \
+X(NOT ,"NOT" , "not") \
+X(DIV ,"DIV" , "div") \
+X(MOD ,"MOD" , "mod") \
+X(IN ,"IN" , "in") \
 X(ARRAY ,"ARRAY" , "array") \
 X(DOWNTO ,"DOWNTO" , "downto") \
 X(FUNCTION ,"FUNCTION" , "function") \
@@ -132,12 +132,11 @@ X(DO ,"DO" , "do") \
 X(FOR ,"FOR" , "for") \
 X(NIL ,"NIL" , "nil") \
 X(RECORD ,"RECORD" , "record") \
-X(TYPE ,"TYPE" , "TYPE") \
-X(ID ,"ID" , "") \
-X(STRING ,"STRING" , "") \
-X(INTEGER ,"INTEGER" , "") \
-X(FLOAT ,"FLOAT" , "") \
-
+X(TYPE ,"TYPE" , "type") \
+X(STRING ,"STRING" , "string") \
+X(INTEGER ,"INTEGER" , "integer") \
+X(FLOAT ,"FLOAT" , "float")   \
+X(ID ,"ID" , "id") \
 
 //get values by int
 #define X(type, name, value) type,
