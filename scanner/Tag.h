@@ -164,9 +164,8 @@ char const *tag_value[] =
 #undef X
 
 
-
-
-int getType(const std::string &str){
+//get type of tag
+int getTypeTag(const std::string &str){
 #define X(type, name, value) if ( str == value) return type; else
     TAGS
 #undef X
@@ -174,9 +173,13 @@ int getType(const std::string &str){
 }
 
 
-
-
-
+//get name of tag
+std::string getNameTag(int tag){
+#define X(type, name, value) if ( tag == type) return name; else
+    TAGS
+#undef X
+        return "unknown";
+}
 
 
 #endif //COMPILATOR_TAG_H

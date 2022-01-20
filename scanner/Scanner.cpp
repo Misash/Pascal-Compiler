@@ -131,10 +131,20 @@ public:
     }
 
 
-
-    string get_type(int type){
-        return Tag_Name(type);
+    bool isNumberic(char c){
+        return (int)c >= 48 && (int)c <=57;
     }
+
+    bool isAlpha(char c){
+        return ((int)c >= 65 && (int)c <=90) || ((int)c >= 97 && (int)c <=122) ;
+    }
+
+    Token createToken(int type , string value){
+        Token token(type , value);
+        return token;
+    }
+
+
 
     Token get_operator_and_delimiter(){
         Token *token_ptr = nullptr;
@@ -143,17 +153,30 @@ public:
         if (check_double_Token(peek)) {
             tokenValue += peek;
             tokenValue += peek_Char();
-            token_ptr = new Token(get_value(tokenValue), tokenValue);
+            token_ptr = new Token(getTypeTag(tokenValue), tokenValue);
         } else{
             tokenValue += peek;
-            token_ptr = new Token(get_value(tokenValue), tokenValue);
+            token_ptr = new Token(getTypeTag(tokenValue), tokenValue);
         }
-
-        cout << line << "| type: " << get_type(token_ptr->type) << "  ,  val: " << token_ptr->value;
         return *token_ptr;
     }
 
+    Token get_Number(){
+        string num = "";
+        do{
+            num += peek;
+            get_char();
+        }while(isNumberic(peek));
 
+        if(peek != '.') return createToken(INTEGER, num);
+
+        do{
+            num += peek;
+            get_char();
+        }while(isNumberic(peek));
+
+        return createToken(FLOAT,num);
+    }
 
 
 
@@ -162,18 +185,21 @@ public:
         //skip comment and whitespace
         skip();
 
-
         //read operator and delimiter
         if(peek == '+' || peek == '-' || peek == '*' ||
            peek == '/' || peek == '=' || peek == '<' ||
            peek == '>' || peek == ',' || peek == ';' ||
            peek == '(' || peek == ')' || peek == '[' ||
            peek == ']' || peek == ':'){
-//            return get_operator_and_delimiter();
+            return get_operator_and_delimiter();
         }
 
-
         //read number
+        if(isNumberic(peek)) return get_Number();
+
+
+
+
 
 
 
@@ -203,25 +229,30 @@ int main(){
 
     Scanner lexer;
 
-//    lexer.scan();
+    Token t = lexer.scan();
+
+
+    cout << lexer.line << "| type: " <<  getNameTag(t.type) <<"  ,  val: " << t.value;
+
+
+
+
+
+
+
+
+
+
 
 //    cout<<endl<<ENUM_TO_STR(1);
-
-    string x = tag_name[2];
-
+//    string x = tag_name[2];
 //    std::cout << "Enum type: " <<  tag_type::PLUS<< std::endl;
 //    std::cout << "Name name: " << x << std::endl;
 //    std::cout << "Name value: " << tag_value[tag_type::PLUS] << std::endl;
 //    std::cout << "Name type: " << tag_value[tag_type::PLUS] << std::endl;
-    std::cout << "Name type: " << getType("-")<< std::endl;
+//    std::cout << "Name type: " << getTypeTag("-")<< std::endl;
 //
 
-//    for (int i = 0; i < 57; ++i) {
-//        cout<<"\nX("<<Tag_Name(i)<<" ,\""<< Tag_Name(i)<<"\" , \""<<lexer.words[i]<<"\") \\";
-//    }
 
-//    for (int i = 0; i < 57; ++i) {
-//        cout<<"\nX("<<Tag_Name(i)<<" ,\""<< Tag_Name(i)<<"\" , \""<<lexer.words[i]<<"\") \\";
-//    }
 
 }
