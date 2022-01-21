@@ -191,7 +191,7 @@ public:
         }while(isLetter(peek) || isNumberic(peek));
 
         if(peek == '@' || peek == '#' || peek == '%' || peek == '_' || peek == '&'){
-            cout<<"\nWARNING: invalid simbol at line "<<line<<"\n";
+            cout<<"\nWARNING: invalid simbol '"<<peek<<"' at line "<<line<<"\n";
             return 0;
         }
 
@@ -199,6 +199,29 @@ public:
             return createToken(getTypeTag(name),name);
         else
             return createToken(ID,name);
+    }
+
+
+
+    Token* get_String(){
+        string txt = "";
+        get_char();
+        while (!file.eof() && peek != '\n'){
+
+            if(peek == '\'' && peek_Char() ==  '\'' ){
+                get_char();
+            }else if(peek == '\'' && peek_Char() != '\''){
+                return createToken(STRING,txt);
+            }
+
+            txt += peek;
+            get_char();
+        }
+
+        if(peek == '\n'){
+            cout<<"\nWARNING: invalid dtring  at line "<<line<<"\n";
+            return 0;
+        }
     }
 
 
@@ -223,18 +246,8 @@ public:
         //read keyword or ID token
         if(isLetter(peek)) return get_KeyWord_or_ID();
 
-
-
-
-
-
-
-
-//        if(!file.eof()) cout<<line<<"  "<<file.peek()<<endl;
-
-
-
-
+        //read string
+        if(peek == '\'') return get_String();
 
     }
 
@@ -253,8 +266,10 @@ int main(){
 
     Token* t = lexer.scan();
 
+    if( t){
+        cout << lexer.line << "| type: " <<  getNameTag(t->type) <<"  ,  val: " << t->value;
+    }
 
-    cout << lexer.line << "| type: " <<  getNameTag(t->type) <<"  ,  val: " << t->value;
 
 
 

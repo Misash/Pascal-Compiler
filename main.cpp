@@ -14,11 +14,10 @@ int main()
     // empty map container
     auto x = 1;
 
-    char c = '/';
-
-    string tagVal = ""  ;
-    tagVal += c;
+    char c = '\'';
 
 
-    cout<<tagVal;
+
+
+    cout<<c;
 }
