@@ -1,7 +1,21 @@
 
 
 (* comment here *)
-'as''gh1 '
+
+{asd}
+
+program Hello;
+begin
+
+{asd}
+
+
+  writeln ('Hello, world.');
+  readln;
+end.
+
+
+
 
 
 

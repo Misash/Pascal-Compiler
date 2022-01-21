@@ -114,7 +114,6 @@ public:
     void skip(){
         skipWhitespace();
         skipComments();
-        skipWhitespace();
     }
 
 
@@ -228,8 +227,11 @@ public:
 
     Token* scan() {
 
+        if(file.eof()) return 0;
+
         //skip comment and whitespace
-        skip();
+        while(!file.eof() && ( peek == ' ' || peek == '\n' || peek == '\t'))
+            skip();
 
         //read operator and delimiter
         if(peek == '+' || peek == '-' || peek == '*' ||
@@ -249,11 +251,25 @@ public:
         //read string
         if(peek == '\'') return get_String();
 
+        return 0;
     }
 
 
+    void run(){
 
+        Token * token_ptr = 0;
+        do{
+            token_ptr = scan();
+            if( token_ptr){
+                cout <<"\n"<<line << "|\t < " <<  getNameTag(token_ptr->type) <<" , \'" << token_ptr->value<<"\'  >";
+            }
+            get_char();
 
+        } while (token_ptr);
+
+        if(!token_ptr && !file.eof()) cout<<"\nERROR at line "<<line<<" reading "<<peek;
+
+    }
 
 
 };
@@ -264,11 +280,13 @@ int main(){
 
     Scanner lexer;
 
-    Token* t = lexer.scan();
+    lexer.run();
 
-    if( t){
-        cout << lexer.line << "| type: " <<  getNameTag(t->type) <<"  ,  val: " << t->value;
-    }
+//    Token* t = lexer.scan();
+//
+//    if( t){
+//        cout << lexer.line << "| type: " <<  getNameTag(t->type) <<"  ,  val: " << t->value;
+//    }
 
 
 
