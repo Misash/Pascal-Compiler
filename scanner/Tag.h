@@ -13,14 +13,16 @@ X(MINUS ,"MINUS" , "-") \
 X(DIVIDE ,"DIVIDE" , "/") \
 X(TIMES ,"TIMES" , "*") \
 X(ASSIGN ,"ASSIGN" , ":=") \
+X(RANGE ,"RANGE" , "..") \
 X(EQ ,"EQ" , "=") \
 X(NE ,"NE" , "<>") \
 X(LT ,"LT" , "<") \
 X(GT ,"GT" , ">") \
 X(LE ,"LE" , "<=") \
 X(GE ,"GE" , ">=") \
-X(COMMA ,"COMMA" , ",") \
+X(COMMA ,"COMMA" , ",")       \
 X(SEMICOLON ,"SEMICOLON" , ";") \
+X(DOT,"DOT",".")             \
 X(COLON ,"COLON" , ":") \
 X(OPEN_PAREN ,"OPEN_PAREN" , "(") \
 X(CLOSE_PAREN ,"CLOSE_PAREN" , ")") \
@@ -31,8 +33,9 @@ X(OR ,"OR" , "or") \
 X(NOT ,"NOT" , "not") \
 X(DIV ,"DIV" , "div") \
 X(MOD ,"MOD" , "mod") \
-X(IN ,"IN" , "in") \
-X(ARRAY ,"ARRAY" , "array") \
+X(IN ,"IN" , "in")            \
+X(ARRAY ,"ARRAY" , "array")   \
+X(WRITELN,"WRITELN" ,"writeln")  \
 X(DOWNTO ,"DOWNTO" , "downto") \
 X(FUNCTION ,"FUNCTION" , "function") \
 X(OF ,"OF" , "of") \
@@ -47,6 +50,7 @@ X(VAR ,"VAR" , "var") \
 X(CASE ,"CASE" , "case") \
 X(END ,"END" , "end") \
 X(IF ,"IF" , "if") \
+X(PROCEDURE ,"PROCEDURE" , "procedure")  \
 X(THEN ,"THEN" , "then") \
 X(WHILE ,"WHILE" , "while") \
 X(CONST ,"CONST" , "const") \
@@ -62,7 +66,7 @@ X(RECORD ,"RECORD" , "record") \
 X(TYPE ,"TYPE" , "type") \
 X(STRING ,"STRING" , "string") \
 X(INTEGER ,"INTEGER" , "integer") \
-X(FLOAT ,"FLOAT" , "float")   \
+X(REAL ,"REAL" , "real")   \
 X(ID ,"ID" , "id") \
 
 //get values by int

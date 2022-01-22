@@ -1,23 +1,28 @@
-// CPP Program to demonstrate the implementation in Map
+// CPP Program to demonstrate the implementation of Scanner
+
+//#include "scanner/Scanner.cpp"
+
 #include <iostream>
-#include <iterator>
-#include <map>
-using namespace std;
 
-bool isNumber(char c){
-    return (int)c >= 48 && (int)c <=57;
-}
+int main(){
 
-int main()
-{
+//    Scanner lexer;
+//
+//    lexer.run();
+//
+//    //print ERRORS
+//
+//    for (int i = 0; i < lexer.errors.size(); ++i) {
+//        cout<<"\n"<<lexer.errors[i]->message;
+//    }
+//
+//    cout<<"\n";
+//
+//    //print TOKENS
+//    for (int i = 0; i < lexer.tokens.size() ; ++i) {
+//        cout <<"\nline: "<<lexer.line << " |\t < " <<  getNameTag(lexer.tokens[i]->type)
+//             <<" , \'" << lexer.tokens[i]->value<<"\'  >";
+//    }
+    std::cout<<"a";
 
-    // empty map container
-    auto x = 1;
-
-    char c = '\'';
-
-
-
-
-    cout<<c;
 }

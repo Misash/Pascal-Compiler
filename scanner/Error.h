@@ -6,11 +6,13 @@
 
 struct Error {
     int line , line_row ;
-    std::string line_context , message;
-    Error( ){
-        line = line_row = 1;
-        line_context = message = "";
+    std::string  message;
+    Error( int line , int line_row  , std::string message){
+      this->line = line;
+      this->line_row = line_row;
+      this->message = message;
     }
+
 };
 
 #endif //COMPILATOR_ERROR_H

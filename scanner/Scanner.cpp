@@ -2,8 +2,9 @@
 
 #include<iostream>
 #include<bits/stdc++.h> //stl
-#include "Token.cpp"
+#include "Token.h"
 #include "Error.h"
+#include "Tag.h"
 #include <fstream>
 
 using namespace std;
@@ -15,7 +16,6 @@ public:
 
 //    Error* error ;
 
-
     string fileDir = "../test/main.pas";
     ifstream file;
 
@@ -23,56 +23,20 @@ public:
     int line = 1;
     int line_row = 1;
     string line_context = "";
-    map<int,string> words;
+    vector<Token*> tokens;
+    vector<Error*> errors;
 
     Scanner(){
         //open pascal file and seek begin position
         file.open(fileDir,ios::in);
         file.seekg(0,ios::beg);
-
-
     }
 
-
-    void reserve(int key,string value){
-        words.insert(pair<int,string>(key,value));
-    }
-
-//
-//
-//    char get_char2(){
-////        string texto;
-////
-////
-////        for (int i = 1; !file.eof() ; ++i) {
-////            getline(file,texto);
-////            cout<<i<<" "<<texto<<endl;
-////        }
-////
-////        file.close();
-//
-////        char c;
-////        int i= 0;
-////        file.get(c);
-////        while( file.eof() == false){
-////            cout<<i++<<" "<<c<<endl;
-////            file.get(c);
-////        }
-//
-//
-////        typedef std::istreambuf_iterator<char> buf_iter;
-////        std::fstream file(fileDir);
-////        for(buf_iter i(file), e; i != e; ++i){
-////            auto j = i++;
-////            cout<<*i<<" "<<*(i--)<<endl;
-//////            char c = *i;
-////
-////        }
-//
-//    }
 
     string get_char(){
         // consume and return the next char
+        if(peek != '\n') line_row++;
+        else line_row = 1;
         file.get(peek);
         return to_string(peek);
     }
@@ -82,6 +46,9 @@ public:
         return (char)file.peek() ;
     }
 
+    void consume(int i){
+        while ( i--) get_char();
+    }
 
 
     void skipWhitespace(){
@@ -96,14 +63,17 @@ public:
 
         if(peek == '{'){
             while(!file.eof()){
+                line +=(peek == '\n');
                 if(peek == '}'){get_char(); break;}
                 get_char();
             }
         }
         else if(peek == '(' && peek_Char() == '*'){
+            consume(2);
             while(!file.eof()){
+                line +=(peek == '\n');
                 if(peek == '*' && peek_Char() == ')'){
-                    get_char() ,get_char(); break;
+                    consume(2); break;
                 }
                 get_char();
             }
@@ -121,13 +91,10 @@ public:
         if(file.peek() == file.eof()) return 0;
         if( (peek == ':' || peek == '>') && peek_Char() == '=' ) return 1;
         if( peek == '<'  && (peek_Char() == '=' ||  peek_Char() == '>') ) return 1;
+        if(peek == '.' && peek_Char() == '.') return 1;
         return 0;
     }
 
-    int get_value(string key){
-        for (auto it = words.begin(); it != words.end()  ; ++it)
-            if(it->second == key) return it->first;
-    }
 
 
     bool isNumberic(char c){
@@ -140,7 +107,7 @@ public:
 
     bool isKeyword(string tagVal){
         int tagType = getTypeTag(tagVal);
-        return tagType >=AND && tagType <=FLOAT;
+        return tagType >=AND && tagType <=REAL;
     }
 
     Token* createToken(int type , string value){
@@ -158,28 +125,38 @@ public:
             tokenValue += peek;
             tokenValue += peek_Char();
             token_ptr = new Token(getTypeTag(tokenValue), tokenValue);
+            get_char();
         } else{
             tokenValue += peek;
             token_ptr = new Token(getTypeTag(tokenValue), tokenValue);
         }
+        get_char();
         return token_ptr;
+    }
+
+    void consume_Numbers(string &num){
+        while(isNumberic(peek)){
+            num += peek;
+            get_char();
+        }
+    }
+
+    Token* consume_scientificNotation(string &num){
+        consume_Numbers(num);
+        if(peek == 'e' && !file.eof() && ( peek_Char() == '+' || peek_Char() == '-' || isNumberic(peek_Char()))){
+            num += peek; get_char(); num += peek; get_char();
+            consume_Numbers(num);
+            return createToken(REAL , num);
+        }
     }
 
     Token* get_Number(){
         string num = "";
-        do{
-            num += peek;
-            get_char();
-        }while(isNumberic(peek));
-
-        if(peek != '.') return createToken(INTEGER, num);
-
-        do{
-            num += peek;
-            get_char();
-        }while(isNumberic(peek));
-
-        return createToken(FLOAT,num);
+        consume_scientificNotation(num);
+        if(  peek != '.' || ( peek == '.' && peek_Char() == '.') ) return createToken(INTEGER, num);
+        num += peek; get_char();
+        consume_scientificNotation(num);
+        return createToken(REAL,num);
     }
 
     Token* get_KeyWord_or_ID(){
@@ -190,7 +167,6 @@ public:
         }while(isLetter(peek) || isNumberic(peek));
 
         if(peek == '@' || peek == '#' || peek == '%' || peek == '_' || peek == '&'){
-            cout<<"\nWARNING: invalid simbol '"<<peek<<"' at line "<<line<<"\n";
             return 0;
         }
 
@@ -210,15 +186,14 @@ public:
             if(peek == '\'' && peek_Char() ==  '\'' ){
                 get_char();
             }else if(peek == '\'' && peek_Char() != '\''){
+                get_char();
                 return createToken(STRING,txt);
             }
 
             txt += peek;
             get_char();
         }
-
         if(peek == '\n'){
-            cout<<"\nWARNING: invalid dtring  at line "<<line<<"\n";
             return 0;
         }
     }
@@ -238,7 +213,7 @@ public:
            peek == '/' || peek == '=' || peek == '<' ||
            peek == '>' || peek == ',' || peek == ';' ||
            peek == '(' || peek == ')' || peek == '[' ||
-           peek == ']' || peek == ':'){
+           peek == ']' || peek == ':' || peek == '.' || peek == '^'){
             return get_operator_and_delimiter();
         }
 
@@ -256,58 +231,24 @@ public:
 
 
     void run(){
-
         Token * token_ptr = 0;
+        Error * error_ptr = 0;
         do{
             token_ptr = scan();
             if( token_ptr){
-                cout <<"\n"<<line << "|\t < " <<  getNameTag(token_ptr->type) <<" , \'" << token_ptr->value<<"\'  >";
+                tokens.push_back(token_ptr);
+            }else if(!file.eof()){
+                string message = "Error: reading Token ""at line " + to_string(line) + " and  row " + to_string(line_row);
+                error_ptr = new Error(line,line_row ,message);
+                errors.push_back(error_ptr);
+                get_char();
             }
-            get_char();
 
-        } while (token_ptr);
-
-        if(!token_ptr && !file.eof()) cout<<"\nERROR at line "<<line<<" reading "<<peek;
+        } while (!file.eof());
 
     }
-
 
 };
 
 
 
-int main(){
-
-    Scanner lexer;
-
-    lexer.run();
-
-//    Token* t = lexer.scan();
-//
-//    if( t){
-//        cout << lexer.line << "| type: " <<  getNameTag(t->type) <<"  ,  val: " << t->value;
-//    }
-
-
-
-
-//    cout<<lexer.isKeyword("for");
-//    cout<<AND<<" "<<FLOAT;
-
-
-
-
-
-
-//    cout<<endl<<ENUM_TO_STR(1);
-//    string x = tag_name[2];
-//    std::cout << "Enum type: " <<  tag_type::PLUS<< std::endl;
-//    std::cout << "Name name: " << x << std::endl;
-//    std::cout << "Name value: " << tag_value[tag_type::PLUS] << std::endl;
-//    std::cout << "Name type: " << tag_value[tag_type::PLUS] << std::endl;
-//    std::cout << "Name type: " << getTypeTag("-")<< std::endl;
-//
-
-
-
-}
