@@ -1,10 +1,9 @@
 
 
-#include<iostream>
+#include <iostream>
 #include<bits/stdc++.h> //stl
-#include "Token.h"
-#include "Error.h"
 #include "Tag.h"
+#include "Token.h"
 #include <fstream>
 
 using namespace std;
@@ -13,8 +12,6 @@ using namespace std;
 class Scanner{
 
 public:
-
-//    Error* error ;
 
     string fileDir = "../test/main.pas";
     ifstream file;
@@ -249,6 +246,30 @@ public:
     }
 
 };
+
+int main(){
+
+    Scanner lexer;
+
+    lexer.run();
+
+    //print ERRORS
+
+    for (int i = 0; i < lexer.errors.size(); ++i) {
+        cout<<"\n"<<lexer.errors[i]->message;
+    }
+
+    cout<<"\n";
+
+    //print TOKENS
+    for (int i = 0; i < lexer.tokens.size() ; ++i) {
+        cout <<"\nline: "<<lexer.line << " |\t < " <<  getNameTag(lexer.tokens[i]->type)
+             <<" , \'" << lexer.tokens[i]->value<<"\'  >";
+    }
+
+
+}
+
 
 
 

@@ -1,9 +1,8 @@
 
-#ifndef COMPILATOR_TAG_H
-#define COMPILATOR_TAG_H
+#ifndef COMPILATOR_TAG_CPP
+#define COMPILATOR_TAG_CPP
 
 #include <string>
-#include <iostream>
 
 
 #define TAGS \
@@ -94,12 +93,13 @@ char const *tag_value[] =
 #undef X
 
 
+
 //get type of tag
 int getTypeTag(const std::string &str){
 #define X(type, name, value) if ( str == value) return type; else
     TAGS
 #undef X
-    return -1;
+        return -1;
 }
 
 
@@ -112,4 +112,7 @@ std::string getNameTag(int tag){
 }
 
 
-#endif //COMPILATOR_TAG_H
+
+
+
+#endif //COMPILATOR_TAG_CPP
