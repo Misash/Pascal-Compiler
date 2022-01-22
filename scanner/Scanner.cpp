@@ -263,7 +263,7 @@ int main(){
 
     //print TOKENS
     for (int i = 0; i < lexer.tokens.size() ; ++i) {
-        cout <<"\nline: "<<lexer.line << " |\t < " <<  getNameTag(lexer.tokens[i]->type)
+        cout <<"\n < " <<  getNameTag(lexer.tokens[i]->type)
              <<" , \'" << lexer.tokens[i]->value<<"\'  >";
     }
 
