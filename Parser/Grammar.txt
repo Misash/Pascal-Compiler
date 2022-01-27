@@ -1,0 +1,43 @@
+
+ // LL(1) grammar ('' is ε):
+
+
+Assign -> id :=  Expr  ;
+
+Expr → not Expr Expr’
+Expr -> Expr2 Expr’
+Expr’  -> BooleanOp Expr2 Expr’
+Expr’ -> ‘ ‘
+
+Expr2 -> Expr3 Expr2’
+Expr2’ -> RelOp Expr3 Expr2’
+Expr2’ -> ‘ ‘
+
+
+Expr3 -> Term Expr3’
+Expr3’ -> + Term Expr3’
+Expr3’ -> - Term Expr3’
+Expr3’ -> ‘ ‘
+
+
+Term -> Factor Term’
+Term’ -> * Factor Term’
+Term’ -> / Factor Term’
+Term’ -> div Factor Term’
+Term’ -> mod Factor Term’
+Term’ -> ‘ ’
+
+Factor -> id
+Factor -> Value
+Factor -> ( Expr )
+
+RelOp ->  eq
+RelOp -> ne
+RelOp ->  lt
+RelOp -> le
+RelOp -> ge
+RelOp -> gt
+
+BooleanOp -> and
+BooleanOp -> or
+
