@@ -7,16 +7,12 @@
 using namespace std;
 
 
+
 struct ParseTreeNode{
 
-    enum{
-        T , NT
-    };
-
-    ParseTreeNode(const string &val , int type) : Value(val) , Type(type) {}
+    ParseTreeNode(const string &val ) : Value(val)  {}
 
     string Value;
-    int Type;
     list<ParseTreeNode*> children;
 };
 
@@ -32,48 +28,124 @@ public:
         root = 0;
     }
 
-    void track (Node * n , string x , bool &flag , Node**&p ){
+
+    void find (Node * n , string x , bool &flag , Node*&p  ){
         if( !n) return;
         //check not termminal
-        if(!flag && n->Value == x && n->Type && !(n->children.size())){
-            p = &n;
+        if(!flag && n->Value == x  && !(n->children.size())){
+            p = n;
             flag = 1;
-            return;
         }
+
         for (auto iter = n->children.begin(); iter != n->children.end() ; ++iter) {
-            track(*iter , x , flag , p);
+            find(*iter , x , flag , p);
         }
     }
 
-    bool find(string x , Node**&p){
+    void insert(string val , vector<string>* childs=0){
         bool flag = 0;
-        track(root,x,flag,p);
-        return flag;
+        Node*p = 0;
+        Node *node = new Node(val);
+
+        if(!root) { root = node; return;}
+
+        find(root,val,flag,p);
+        if(flag){
+
+            cout<<"\nval: "<<val<<" valencontrado: "<<p->Value;
+            for (auto i = (*childs).begin(); i != (*childs).end()  ; ++i) {
+                node = new Node(*i);
+                p->children.push_back(node);
+            }
+        }else{
+            cout<<"\nnot valid insertion ParserTree with "<<val ;
+        }
     }
 
-    void insert(string val , int type){
-        Node**p = &root;
-        Node *node = new Node(val , type);
-        if(find(val , p)){
-            (*p)->children.push_back(node);
+    void printLevelOrder(Node *n){
+
+        if ( !n) return;
+
+        queue<Node *> q;
+        q.push(n);
+
+        while ( !q.empty())
+        {
+            int nodeCount = q.size();
+
+            while (nodeCount > 0)
+            {
+                Node *node = q.front();
+                cout <<node->Value << " ";
+                q.pop();
+                for (auto iter = node->children.begin(); iter != node->children.end() ; ++iter) {
+                    q.push(*iter);
+                }
+                nodeCount--;
+            }
+            cout << endl;
         }
-        else if(!root){
-            *p = node;
+    }
+
+    void findTerminals(Node * n ,vector<string>& t){
+        if( !n) return;
+
+        if( !n->children.size() && n->Value.size() <=2 )
+            t.push_back(n->Value);
+
+        for (auto iter = n->children.begin(); iter != n->children.end() ; ++iter) {
+            findTerminals(*iter , t);
         }
-        else if(!root->children.size()){
-            (*p)->children.push_back(node);
-        }
-        else{
-            cout<<"not valid insertion ParserTree!";
-        }
-        return;
     }
 
 
-    void Print(){
+    void printBNF(Node *n){
 
+        if ( !n) return;
+
+        vector<string> terminals;
+        queue<Node *> q;
+        q.push(n);
+
+        while ( !q.empty())
+        {
+            int nodeCount = q.size();
+
+
+            if(terminals.size())
+                for (int i = 0; i < terminals.size(); ++i)
+                    cout<<terminals[i]<<" ";
+
+            findTerminals(q.front(),terminals);
+
+            while (nodeCount > 0)
+            {
+                Node *node = q.front();
+//                if(node->Value.size() <= 2 ){
+//                    terminals.push_back(node->Value);
+//                }
+
+                cout <<node->Value << " ";
+
+
+                q.pop();
+                for (auto iter = node->children.begin(); iter != node->children.end() ; ++iter) {
+                    q.push(*iter);
+
+                }
+                nodeCount--;
+            }
+            cout << endl;
+
+
+        }
     }
 
+
+    void print(){
+//        printLevelOrder(root);
+        printBNF(root);
+    }
 
 
 

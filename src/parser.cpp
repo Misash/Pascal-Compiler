@@ -41,23 +41,57 @@ public:
 
 int main(){
 
-    Scanner lexer;
+//    Scanner lexer;
+//
+//    lexer.get_tokens();
+//
+//    //print ERRORS
+//
+//    for (int i = 0; i < lexer.errors.size(); ++i) {
+//        cout<<"\n"<<lexer.errors[i]->message;
+//    }
+//
+//    cout<<"\n";
+//
+//    //print TOKENS
+//    for (int i = 0; i < lexer.tokens.size() ; ++i) {
+//        cout <<"\n < " <<  getNameTag(lexer.tokens[i]->type)
+//             <<" , \'" << lexer.tokens[i]->value<<"\'  >";
+//    }
 
-    lexer.get_tokens();
 
-    //print ERRORS
+    ParseTree t;
 
-    for (int i = 0; i < lexer.errors.size(); ++i) {
-        cout<<"\n"<<lexer.errors[i]->message;
-    }
+    vector<string> v;
 
-    cout<<"\n";
+    t.insert("<assign>");
 
-    //print TOKENS
-    for (int i = 0; i < lexer.tokens.size() ; ++i) {
-        cout <<"\n < " <<  getNameTag(lexer.tokens[i]->type)
-             <<" , \'" << lexer.tokens[i]->value<<"\'  >";
-    }
+    vector<string> v2 = {"<id>" , ":=" , "<expr>"};
+    t.insert("<assign>",&v2);
+
+
+
+    vector<string> v3 = {"<id>" , "*" , "<expr>"};
+    t.insert("<expr>",&v3);
+
+
+    vector<string> v4 = {"A"};
+    t.insert("<id>",&v4);
+
+
+
+
+    vector<string> v5 = {"C"};
+    t.insert("<id>",&v5);
+
+    t.insert("<expr>",&v3);
+
+    t.insert("<expr>",&v3);
+
+
+
+    cout<<"\n\nGRAFICO:\n\n";
+    t.print();
 
 
 }
