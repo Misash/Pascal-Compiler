@@ -84,14 +84,22 @@ int main(){
     vector<string> v5 = {"C"};
     t.insert("<id>",&v5);
 
-    t.insert("<expr>",&v3);
+
+
+    vector<string> v6 = {"<expr>"};
+    t.insert("<expr>",&v6);
 
     t.insert("<expr>",&v3);
+
 
 
 
     cout<<"\n\nGRAFICO:\n\n";
     t.print();
+
+
+    cout<<"\n\nRES:\n\n";
+    t.printResul();
 
 
 }

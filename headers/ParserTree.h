@@ -47,12 +47,14 @@ public:
         Node*p = 0;
         Node *node = new Node(val);
 
+
+
         if(!root) { root = node; return;}
 
         find(root,val,flag,p);
         if(flag){
-
-            cout<<"\nval: "<<val<<" valencontrado: "<<p->Value;
+            cout<<"\n";findTerminals(root); //PRINT
+//            cout<<"\nval: "<<val<<" valencontrado: "<<p->Value;
             for (auto i = (*childs).begin(); i != (*childs).end()  ; ++i) {
                 node = new Node(*i);
                 p->children.push_back(node);
@@ -87,14 +89,17 @@ public:
         }
     }
 
-    void findTerminals(Node * n ,vector<string>& t){
+    void findTerminals(Node * n ){
         if( !n) return;
 
-        if( !n->children.size() && n->Value.size() <=2 )
-            t.push_back(n->Value);
+        if( !n->children.size() ){
+//            t.push_back(n->Value);
+            cout<<n->Value<<" ";
+        }
+
 
         for (auto iter = n->children.begin(); iter != n->children.end() ; ++iter) {
-            findTerminals(*iter , t);
+            findTerminals(*iter );
         }
     }
 
@@ -116,7 +121,7 @@ public:
                 for (int i = 0; i < terminals.size(); ++i)
                     cout<<terminals[i]<<" ";
 
-            findTerminals(q.front(),terminals);
+//            findTerminals(q.front(),terminals);
 
             while (nodeCount > 0)
             {
@@ -143,11 +148,15 @@ public:
 
 
     void print(){
-//        printLevelOrder(root);
-        printBNF(root);
+        printLevelOrder(root);
+//        printBNF(root);
     }
 
 
+
+    void printResul(){
+        findTerminals(root);
+    }
 
 
 
