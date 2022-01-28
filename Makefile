@@ -11,3 +11,4 @@ run:
 clean:
 	@ cd scanner/ && rm -f *.o  $(TARGET)
 
+#g++ parser.cpp -o pro && ./pro

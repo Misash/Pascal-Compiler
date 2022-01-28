@@ -1,9 +1,9 @@
 
 
 #include <iostream>
-#include<bits/stdc++.h> //stl
-#include "Tag.h"
-#include "Token.h"
+#include<bits/stdc++.h>
+#include "../headers/Tag.h"
+#include "../headers/Token.h"
 #include <fstream>
 
 using namespace std;
@@ -227,7 +227,7 @@ public:
     }
 
 
-    void run(){
+    void get_tokens(){
         Token * token_ptr = 0;
         Error * error_ptr = 0;
         do{
@@ -247,28 +247,28 @@ public:
 
 };
 
-int main(){
-
-    Scanner lexer;
-
-    lexer.run();
-
-    //print ERRORS
-
-    for (int i = 0; i < lexer.errors.size(); ++i) {
-        cout<<"\n"<<lexer.errors[i]->message;
-    }
-
-    cout<<"\n";
-
-    //print TOKENS
-    for (int i = 0; i < lexer.tokens.size() ; ++i) {
-        cout <<"\n < " <<  getNameTag(lexer.tokens[i]->type)
-             <<" , \'" << lexer.tokens[i]->value<<"\'  >";
-    }
-
-
-}
+//int main(){
+//
+//    Scanner lexer;
+//
+//    lexer.run();
+//
+//    //print ERRORS
+//
+//    for (int i = 0; i < lexer.errors.size(); ++i) {
+//        cout<<"\n"<<lexer.errors[i]->message;
+//    }
+//
+//    cout<<"\n";
+//
+//    //print TOKENS
+//    for (int i = 0; i < lexer.tokens.size() ; ++i) {
+//        cout <<"\n < " <<  getNameTag(lexer.tokens[i]->type)
+//             <<" , \'" << lexer.tokens[i]->value<<"\'  >";
+//    }
+//
+//
+//}
 
 
 
