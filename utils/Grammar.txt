@@ -41,3 +41,7 @@ RelOp -> gt
 BooleanOp -> and
 BooleanOp -> or
 
+
+Value -> string
+Value -> real
+Value -> int

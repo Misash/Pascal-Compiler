@@ -44,20 +44,26 @@ public:
 
     void insert(string val , vector<string>* childs=0){
         bool flag = 0;
-        Node*p = 0;
+        Node*p;
+        Node**q;
         Node *node = new Node(val);
 
-
-
-        if(!root) { root = node; return;}
-
         find(root,val,flag,p);
+
+        if(!root) {
+            root = node;
+            q = &root;
+            flag = 1;
+        }else{
+            q = &p;
+        }
+
         if(flag){
             cout<<"\n";findTerminals(root); //PRINT
 //            cout<<"\nval: "<<val<<" valencontrado: "<<p->Value;
             for (auto i = (*childs).begin(); i != (*childs).end()  ; ++i) {
                 node = new Node(*i);
-                p->children.push_back(node);
+                (*q)->children.push_back(node);
             }
         }else{
             cout<<"\nnot valid insertion ParserTree with "<<val ;
