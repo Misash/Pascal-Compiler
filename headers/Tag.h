@@ -66,7 +66,9 @@ X(TYPE ,"TYPE" , "type") \
 X(STRING ,"STRING" , "string") \
 X(INTEGER ,"INTEGER" , "integer") \
 X(REAL ,"REAL" , "real")   \
-X(ID ,"ID" , "id") \
+X(ID ,"ID" , "id")   \
+X(FINAL,"$" , "$")    \
+X(EMPTY,"e" , "e")  \
 
 //get values by int
 #define X(type, name, value) type,

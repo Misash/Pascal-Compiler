@@ -13,16 +13,22 @@ class Parser{
 public:
 
     typedef vector<Token*> :: iterator  TokenIter;
+    #define ct currentTokenType()
+
 
     TokenIter token;
     vector<Token*> tokens;
     ParseTree * tree;
+
 
     Parser(){
         //get tokens
         Scanner lexer;
         lexer.get_tokens();
         tokens = lexer.tokens;
+
+        token = tokens.begin();
+
         tree = new ParseTree();
     }
 
@@ -36,18 +42,27 @@ public:
         return (*(tokens.begin() + currentPos + increment))->type;
     }
 
+    int currentTokenType(){
+        return (token != tokens.end())? (*token)->type : -1;
+    }
+
+
 
     void match( int token_type){
-        if(nextToken() == token_type){
+        if(token == tokens.end()) return;
+        if( ct == token_type){
+            string nameType = tag_name[token_type];
+            cout<<nameType<<" ";
             scanToken();
         }else{
-            cout<<"\nmatching error";
+            cout<<"\n >Syntatic error : Expected token "<<tag_name[token_type];
         }
     }
 
 
     void Assign(){
-        if(nextToken() == ID ){
+        if(token == tokens.end()) return;
+        if( ct == ID ){
             match(ID);
             match(ASSIGN);
             Expr();
@@ -56,95 +71,106 @@ public:
     }
 
     void Expr(){
-        int next = nextToken();
-        if(next == NOT){
+        if(token == tokens.end()) return;
+        if( ct == NOT){
+            scanToken();
             Expr();
             _Expr();
         }
-        else if(next == ID || next == OPEN_PAREN || next == STRING || next == REAL || next == INTEGER ){
+        else if( ct == ID || ct == OPEN_PAREN || ct == STRING || ct == REAL || ct == INTEGER ){
             Expr2();
             _Expr();
         }
     }
 
     void _Expr(){
-        int next = nextToken();
-        if(next == AND || next == OR){
+        if(token == tokens.end()) return;
+        if( ct == AND || ct == OR){
             BooleanOp();
             Expr2();
             _Expr();
         }
-        else if(next == CLOSE_PAREN){
-            return;
-        }
+//        else if(ct == SEMICOLON || ct == AND || ct == OR || ct == CLOSE_PAREN){
+//            match(ct);
+//        }
     }
 
     void Expr2(){
-        int next = nextToken();
-        if(next == ID || next == OPEN_PAREN || next == STRING || next == REAL || next == INTEGER ){
+        if(token == tokens.end()) return;
+        if( ct == ID || ct == OPEN_PAREN || ct == STRING || ct == REAL || ct == INTEGER ){
             Expr3();
             _Expr2();
         }
     }
 
+
     void _Expr2(){
-        int next = nextToken();
-        if(next == EQ || next == NE || next == LT || next == LE || next == GE || next == GT ){
+        if(token == tokens.end()) return;
+        if( ct == EQ || ct == NE || ct == LT || ct == LE || ct == GE || ct == GT ){
             RelOp();
             Expr3();
             _Expr2();
         }
+//        else if(ct == SEMICOLON || ct == AND || ct == OR ){
+//            match(ct);
+//        }
     }
 
     void Expr3(){
-        int next = nextToken();
-        if(next == ID || next == OPEN_PAREN || next == STRING || next == REAL || next == INTEGER ){
+        if(token == tokens.end()) return;
+        if(ct == ID || ct == OPEN_PAREN || ct == STRING || ct == REAL || ct == INTEGER ){
             Term();
-            Expr3();
+            _Expr3();
         }
     }
 
     void _Expr3(){
-        int next = nextToken();
-        if(next == PLUS ){
+        if(token == tokens.end()) return;
+        if(ct == PLUS ){
             match(PLUS);
             Term();
             _Expr3();
         }
-        else if(next == MINUS){
+        else if(ct == MINUS){
             match(MINUS);
             Term();
             _Expr3();
         }
+//        else if(ct == SEMICOLON || ct == AND || ct == OR || ct == CLOSE_PAREN || ct == EQ || ct == NE || ct == LT || ct == LE || ct == GE || ct == GT){
+//            match(ct);
+//        }
     }
 
 
     void Term(){
-        int next = nextToken();
-        if(next == ID || next == OPEN_PAREN || next == STRING || next == REAL || next == INTEGER ){
+        if(token == tokens.end()) return;
+        if(ct == ID || ct == OPEN_PAREN || ct == STRING || ct == REAL || ct == INTEGER ){
             Factor();
             _Term();
         }
     }
 
     void _Term(){
-        int next = nextToken();
-        if(next == TIMES || next == DIVIDE || next == DIV || next == MOD){
-            match(next);
+        if(token == tokens.end()) return;
+        if( ct == TIMES || ct == DIVIDE || ct == DIV || ct == MOD ){
+            match(ct);
             Factor();
             _Term();
         }
+//        else if(ct == SEMICOLON || ct == AND || ct == OR || ct == CLOSE_PAREN || ct == EQ || ct == NE || ct == LT || ct == LE || ct == GE || ct == GT){
+//            match(ct);
+//        }
     }
 
     void Factor(){
-        int next = nextToken();
-        if(next == ID  ){
-            match(next);
+        if(token == tokens.end()) return;
+        if(ct == ID  ){
+            match(ct);
         }
-        else if( next == STRING || next == REAL || next == INTEGER ){
+        else if( ct == STRING || ct == REAL || ct == INTEGER ){
             Value();
         }
-        else if( next == OPEN_PAREN ){
+        else if( ct == OPEN_PAREN ){
             match(OPEN_PAREN);
             Expr();
             match(CLOSE_PAREN);
@@ -152,24 +178,41 @@ public:
     }
 
     void RelOp(){
-        int next = nextToken();
-        if(next == EQ || next == NE || next == LT || next == LE || next == GE || next == GT ){
-            match(next);
+        if(token == tokens.end()) return;
+        if(ct == EQ || ct == NE || ct == LT || ct == LE || ct == GE || ct == GT ){
+            match(ct);
         }
     }
 
     void BooleanOp(){
-        int next = nextToken();
-        if(next == AND || next == OR){
-            match(next);
+        if(token == tokens.end()) return;
+        if(ct == AND || ct == OR){
+            match(ct);
         }
     }
 
     void Value(){
-        int next = nextToken();
-        if(next == STRING || next == REAL || next == INTEGER){
-            match(next);
+        if(token == tokens.end()) return;
+        if( ct == STRING || ct== REAL || ct == INTEGER){
+            match(ct);
         }
+    }
+
+
+
+    void parseTokens(){
+
+        //print TOKENS
+        for (int i = 0; i < tokens.size() ; ++i) {
+            cout <<"\n < " <<  getNameTag(tokens[i]->type)
+                 <<" , \'" << tokens[i]->value<<"\'  >";
+        }
+
+        cout<<"\n\nPARSER:";
+
+//        program();
+            Assign();
+
     }
 
 
@@ -179,11 +222,20 @@ public:
 
 int main(){
 
+
+    Parser p;
+
+    p.parseTokens();
+
+
+
+
+
 //    Scanner lexer;
 //
 //    lexer.get_tokens();
 //
-//    //print ERRORS
+//    print ERRORS
 //
 //    for (int i = 0; i < lexer.errors.size(); ++i) {
 //        cout<<"\n"<<lexer.errors[i]->message;
@@ -198,12 +250,12 @@ int main(){
 //    }
 
 
-    ParseTree t;
-
-    vector<string> v;
-
-//    t.insert("<assign>");
-
+//    ParseTree t;
+//
+//    vector<string> v;
+//
+//
+//
 //    vector<string> v2 = {"<id>" , ":=" , "<expr>"};
 //    t.insert("<assign>",&v2);
 //
@@ -236,10 +288,10 @@ int main(){
 //    t.print();
 //
 //
-//    cout<<"\n\nRES:\n\n";
+//    cout<<"\n\nproduccion:\n";
 //    t.printResul();
-
-
+//
+//
 
 
 

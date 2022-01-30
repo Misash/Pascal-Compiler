@@ -2,22 +2,24 @@
  // LL(1) grammar ('' is ε):
 
 
-Assign -> id :=  Expr  ;
 
-Expr → not Expr Expr’
+
+Assign -> id := Expr ;
+
+Expr -> not Expr Expr’
 Expr -> Expr2 Expr’
-Expr’  -> BooleanOp Expr2 Expr’
-Expr’ -> ‘ ‘
+Expr’ -> BooleanOp Expr2 Expr’
+Expr’ -> ''
 
 Expr2 -> Expr3 Expr2’
 Expr2’ -> RelOp Expr3 Expr2’
-Expr2’ -> ‘ ‘
+Expr2’ -> ''
 
 
 Expr3 -> Term Expr3’
 Expr3’ -> + Term Expr3’
 Expr3’ -> - Term Expr3’
-Expr3’ -> ‘ ‘
+Expr3’ -> ''
 
 
 Term -> Factor Term’
@@ -25,15 +27,15 @@ Term’ -> * Factor Term’
 Term’ -> / Factor Term’
 Term’ -> div Factor Term’
 Term’ -> mod Factor Term’
-Term’ -> ‘ ’
+Term’ -> ''
 
 Factor -> id
 Factor -> Value
 Factor -> ( Expr )
 
-RelOp ->  eq
+RelOp -> eq
 RelOp -> ne
-RelOp ->  lt
+RelOp -> lt
 RelOp -> le
 RelOp -> ge
 RelOp -> gt
@@ -45,3 +47,316 @@ BooleanOp -> or
 Value -> string
 Value -> real
 Value -> int
+
+
+
+
+
+
+//
+///* Non-terminals */
+//    void program(){
+//        match(PROGRAM);
+//        match(ID);
+//        match(SEMICOLON);
+//        varDec();
+//        compStmt();
+//        match(DOT);
+//    }
+//
+//    void varDec(){
+//        if( ct == VAR){
+//            match(VAR);
+//            varDecList();
+//        }
+//    }
+//
+//    void varDecList(){
+//        identListType();
+//        match(SEMICOLON);
+//        varDecList2();
+//    }
+//
+//    void varDecList2(){
+//        while(ct == ID){
+//            identListType();
+//            match(SEMICOLON);
+//        }
+//    }
+//
+//    void identListType(){
+//        identList();
+//        match(COLON);
+//        type();
+//    }
+//
+//    void identList(){
+//        match(ID);
+//        identList2();
+//    }
+//
+//    void identList2(){
+//        while(  ct == COMMA){
+//            match(COMMA);
+//            match(ID);
+//        }
+//    }
+//
+//    void type(){
+//        if(ct == ARRAY){
+//            match(ARRAY);
+//            match(OPEN_BRACKET);
+//            if( ct == INTEGER || ct == REAL)
+//                match(ct);
+//            match(RANGE);
+//            if( ct == INTEGER || ct == REAL)
+//                match(ct);
+//            match(CLOSE_BRACKET);
+//            match(OF);
+//            simpleType();
+//        }
+//        else{
+//            simpleType();
+//        }
+//    }
+//
+//    void simpleType(){
+//        switch(ct){
+//            case INTEGER: match(INTEGER); break;
+//            case REAL: match(REAL); break;
+//            case AND: match(AND); break;
+//            case OR: match(OR); break;
+//            case NOT: match(NOT); break;
+//        }
+//    }
+//
+//    void compStmt(){
+//        match(BEGIN);
+//        stmtList();
+//        match(END);
+//    }
+//
+//    void stmtList(){
+//        statement();
+//        stmtList2();
+//    }
+//
+//    void stmtList2(){
+//        while(ct == SEMICOLON){
+//            match(SEMICOLON);
+//            statement();
+//        }
+//    }
+//
+//    void statement(){
+//            switch(ct){
+//            case ID: assignStmt(); break;
+//            case BEGIN: compStmt(); break;
+//            case IF: ifStmt(); break;
+//            case WHILE: whileStmt(); break;
+//            case FOR: forStmt(); break;
+//            case WRITELN:
+//                match(WRITELN);
+//                match(OPEN_PAREN);
+//                exprList();
+//                match(CLOSE_PAREN);
+//                break;
+//        }
+//    }
+//
+//    void assignStmt(){
+//        match(ID);
+//        assignStmt2();
+//    }
+//
+//    void assignStmt2(){
+//        switch(ct){
+//            case ASSIGN:
+//                match(ASSIGN);
+//                expr();
+//                break;
+//            case OPEN_BRACKET:
+//                match(OPEN_BRACKET);
+//                expr();
+//                match(CLOSE_BRACKET);
+//                match(ASSIGN);
+//                expr();
+//                break;
+//        }
+//    }
+//
+//    void ifStmt(){
+//        match(IF);
+//        expr();
+//        match(THEN);
+//        statement();
+//        if(ct == ELSE){
+//            elsePart();
+//        }
+//    }
+//
+//    void elsePart(){
+//        match(ELSE);
+//        statement();
+//    }
+//
+//    void whileStmt(){
+//        match(WHILE);
+//        expr();
+//        match(DO);
+//        statement();
+//    }
+//
+//    void forStmt(){
+//        match(FOR);
+//        match(ID);
+//        match(ASSIGN);
+//        expr();
+//        toPart();
+//        expr();
+//        match(DO);
+//        statement();
+//    }
+//
+//    void toPart(){
+//        switch(ct){
+//            case TO: match(TO); break;
+//            case DOWNTO: match(DOWNTO); break;
+//        }
+//    }
+//
+//    void expr(){
+//        simpleExpr();
+//        expr2();
+//    }
+//
+//    void expr2(){
+//        switch(ct){
+//            case LT:
+//            case LE:
+//            case GT:
+//            case GE:
+//            case EQ:
+//            case NE:
+//                relOp();
+//                simpleExpr();
+//                break;
+//        }
+//    }
+//
+//    void exprList(){
+//        expr();
+//        exprList2();
+//    }
+//
+//    void exprList2(){
+//        while(ct == COMMA){
+//            match(COMMA);
+//            expr();
+//        }
+//    }
+//
+//    void simpleExpr(){
+//        term();
+//        simpleExpr2();
+//    }
+//
+//    void simpleExpr2(){
+//        while(ct == PLUS || ct == MINUS || ct == OR){
+//            addOp();
+//            term();
+//        }
+//    }
+//
+//    void term(){
+//        factor();
+//        term2();
+//    }
+//
+//    void term2(){
+//        while(ct == TIMES || ct == DIVIDE || ct == DIV || ct == MOD || ct == AND){
+//            mulOp();
+//            factor();
+//        }
+//    }
+//
+//    void factor(){
+//        switch(ct){
+//            case INTEGER: match(INTEGER); break;
+//            case REAL: match(REAL); break;
+//            case ID:
+//                match(ID);
+//                factorIdent();
+//                break;
+//            case NOT:
+//                match(NOT);
+//                factor();
+//                break;
+//            case MINUS:
+//                match(MINUS);
+//                factor();
+//                break;
+//            case OPEN_BRACKET:
+//                match(OPEN_PAREN);
+//                expr();
+//                match(CLOSE_PAREN);
+//                break;
+//            case STRING:
+//                match(STRING);
+//                break;
+//        }
+//    }
+//
+//    void factorIdent(){
+//        if(ct == OPEN_BRACKET){
+//            match(OPEN_BRACKET);
+//            expr();
+//            match(CLOSE_BRACKET);
+//        }
+//    }
+//
+//    void relOp(){
+//        switch(ct){
+//            case LT: match(ct); break;
+//            case LE: match(ct); break;
+//            case GT: match(ct); break;
+//            case GE: match(ct); break;
+//            case EQ: match(ct); break;
+//            case NE: match(ct); break;
+//        }
+//    }
+//
+//    void addOp(){
+//        switch(ct){
+//            case PLUS: match(PLUS); break;
+//            case MINUS: match(MINUS); break;
+//            case OR: match(OR); break;
+//        }
+//    }
+//
+//    void mulOp(){
+//        switch(ct){
+//            case TIMES: match(TIMES); break;
+//            case DIVIDE: match(DIVIDE); break;
+//            case DIV: match(DIV); break;
+//            case MOD: match(MOD); break;
+//            case AND: match(AND); break;
+//        }
+//    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
