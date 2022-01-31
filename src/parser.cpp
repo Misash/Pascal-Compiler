@@ -13,6 +13,7 @@ class Parser{
 public:
 
     typedef vector<Token*> :: iterator  TokenIter;
+    typedef ParseTreeNode  Node;
     #define ct currentTokenType()
 
 
@@ -48,11 +49,12 @@ public:
 
 
 
-    void match( int token_type){
+    void match( int token_type,Node* parent ){
         if(token == tokens.end()) return;
         if( ct == token_type){
-            string nameType = tag_name[token_type];
+            string nameType = tag_value[token_type];
             cout<<nameType<<" ";
+            tree->insert(nameType,parent);
             scanToken();
         }else{
             cout<<"\n >Syntatic error : Expected token "<<tag_name[token_type];
@@ -60,81 +62,81 @@ public:
     }
 
 
-    void Assign(){
+    void Assign(Node *node){
         if(token == tokens.end()) return;
         if( ct == ID ){
-            match(ID);
-            match(ASSIGN);
-            Expr();
-            match(SEMICOLON);
+            match(ID,node);
+            match(ASSIGN, node);
+            Expr(tree->insert("<Expr>",node));
+            match(SEMICOLON,node);
         }
     }
 
-    void Expr(){
+    void Expr(Node *node){
         if(token == tokens.end()) return;
         if( ct == NOT){
-            scanToken();
-            Expr();
-            _Expr();
+            match(NOT,node);
+            Expr(tree->insert("<Expr>",node));
+            _Expr(tree->insert("<Expr'>",node));
         }
         else if( ct == ID || ct == OPEN_PAREN || ct == STRING || ct == REAL || ct == INTEGER ){
-            Expr2();
-            _Expr();
+            Expr2(tree->insert("<Expr2>",node));
+            _Expr(tree->insert("<Expr'>",node));
         }
     }
 
-    void _Expr(){
+    void _Expr(Node* node){
         if(token == tokens.end()) return;
         if( ct == AND || ct == OR){
-            BooleanOp();
-            Expr2();
-            _Expr();
+            BooleanOp(tree->insert("<BooleanOp>",node));
+            Expr2(tree->insert("<Expr2>",node));
+            _Expr(tree->insert("<Expr'>",node));
         }
 //        else if(ct == SEMICOLON || ct == AND || ct == OR || ct == CLOSE_PAREN){
 //            match(ct);
 //        }
     }
 
-    void Expr2(){
+    void Expr2(Node* node){
         if(token == tokens.end()) return;
         if( ct == ID || ct == OPEN_PAREN || ct == STRING || ct == REAL || ct == INTEGER ){
-            Expr3();
-            _Expr2();
+            Expr3(tree->insert("<Expr3>",node));
+            _Expr2(tree->insert("<Expr2'>",node));
         }
     }
 
 
-    void _Expr2(){
+    void _Expr2(Node* node){
         if(token == tokens.end()) return;
         if( ct == EQ || ct == NE || ct == LT || ct == LE || ct == GE || ct == GT ){
-            RelOp();
-            Expr3();
-            _Expr2();
+            RelOp(tree->insert("<RelOp>",node));
+            Expr3(tree->insert("<Expr3>",node));
+            _Expr2(tree->insert("<Expr2'>",node));
         }
 //        else if(ct == SEMICOLON || ct == AND || ct == OR ){
 //            match(ct);
 //        }
     }
 
-    void Expr3(){
+    void Expr3(Node* node){
         if(token == tokens.end()) return;
         if(ct == ID || ct == OPEN_PAREN || ct == STRING || ct == REAL || ct == INTEGER ){
-            Term();
-            _Expr3();
+            Term(tree->insert("<Term>",node));
+            _Expr3(tree->insert("<Expr3'>",node));
         }
     }
 
-    void _Expr3(){
+    void _Expr3(Node* node){
         if(token == tokens.end()) return;
         if(ct == PLUS ){
-            match(PLUS);
-            Term();
-            _Expr3();
+            match(PLUS,node);
+            Term(tree->insert("<Term>",node));
+            _Expr3(tree->insert("<Expr3'>",node));
         }
         else if(ct == MINUS){
-            match(MINUS);
-            Term();
-            _Expr3();
+            match(MINUS,node);
+            Term(tree->insert("<Term>",node));
+            _Expr3(tree->insert("<Expr3'>",node));
         }
 //        else if(ct == SEMICOLON || ct == AND || ct == OR || ct == CLOSE_PAREN || ct == EQ || ct == NE || ct == LT || ct == LE || ct == GE || ct == GT){
 //            match(ct);
@@ -142,59 +144,59 @@ public:
     }
 
 
-    void Term(){
+    void Term(Node* node){
         if(token == tokens.end()) return;
         if(ct == ID || ct == OPEN_PAREN || ct == STRING || ct == REAL || ct == INTEGER ){
-            Factor();
-            _Term();
+            Factor(tree->insert("<Factor>",node));
+            _Term(tree->insert("<Term'>",node));
         }
     }
 
-    void _Term(){
+    void _Term(Node* node){
         if(token == tokens.end()) return;
         if( ct == TIMES || ct == DIVIDE || ct == DIV || ct == MOD ){
-            match(ct);
-            Factor();
-            _Term();
+            match(ct,node);
+            Factor(tree->insert("<Factor>",node));
+            _Term(tree->insert("<Term'>",node));
         }
 //        else if(ct == SEMICOLON || ct == AND || ct == OR || ct == CLOSE_PAREN || ct == EQ || ct == NE || ct == LT || ct == LE || ct == GE || ct == GT){
 //            match(ct);
 //        }
     }
 
-    void Factor(){
+    void Factor(Node* node){
         if(token == tokens.end()) return;
         if(ct == ID  ){
-            match(ct);
+            match(ct,node);
         }
         else if( ct == STRING || ct == REAL || ct == INTEGER ){
-            Value();
+            Value(tree->insert("<Value>",node));
         }
         else if( ct == OPEN_PAREN ){
-            match(OPEN_PAREN);
-            Expr();
-            match(CLOSE_PAREN);
+            match(OPEN_PAREN, node);
+            Expr(tree->insert("<Expr>",node));
+            match(CLOSE_PAREN,node);
         }
     }
 
-    void RelOp(){
+    void RelOp(Node* node){
         if(token == tokens.end()) return;
         if(ct == EQ || ct == NE || ct == LT || ct == LE || ct == GE || ct == GT ){
-            match(ct);
+            match(ct,node);
         }
     }
 
-    void BooleanOp(){
+    void BooleanOp(Node* node){
         if(token == tokens.end()) return;
         if(ct == AND || ct == OR){
-            match(ct);
+            match(ct,node);
         }
     }
 
-    void Value(){
+    void Value(Node* node){
         if(token == tokens.end()) return;
         if( ct == STRING || ct== REAL || ct == INTEGER){
-            match(ct);
+            match(ct,node);
         }
     }
 
@@ -211,7 +213,11 @@ public:
         cout<<"\n\nPARSER:";
 
 //        program();
-            Assign();
+
+        tree->root = new Node("<Assign>");
+        Assign(tree->root);
+//        cout<<"\n\ngraphic:\n";
+        tree->print();
 
     }
 
