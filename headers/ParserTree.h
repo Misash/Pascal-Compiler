@@ -29,56 +29,6 @@ public:
     }
 
 
-//
-//    void find (Node * n , string x , bool flag , Node*&p  ){
-//        if( !n) return;
-//        //check not termminal
-////        if(!flag && n->Value == x  && !(n->children.size())){
-////            p = n;
-////            flag = 1;
-////        }
-//
-//
-//
-//        for (auto iter = n->children.begin(); iter != n->children.end() ; ++iter) {
-//            find(*iter , x , flag , p);
-//        }
-//    }
-//
-//    void insert(string val , Node* parent){
-//
-//
-
-
-//        bool flag = 0;
-//        Node*p;
-//        Node**q;
-//        Node *node = new Node(val);
-//
-//        find(root,val,flag,p);
-//
-//        if(!root) {
-//            root = node;
-//            q = &root;
-//            flag = 1;
-//        }else{
-//            q = &p;
-//        }
-//
-//        if(flag){
-//            cout<<"\n";findTerminals(root); //PRINT
-////            cout<<"\nval: "<<val<<" valencontrado: "<<p->Value;
-//            for (auto i = (*childs).begin(); i != (*childs).end()  ; ++i) {
-//                node = new Node(*i);
-//                (*q)->children.push_back(node);
-//            }
-//        }else{
-//            cout<<"\nnot valid insertion ParserTree with "<<val ;
-//        }
-//    }
-
-
-
     Node * insert(string value , Node *& parent){
         Node* n = new Node(value);
         parent->children.push_back(n);
@@ -142,7 +92,6 @@ public:
     }
 
 
-
     void print(){
         string parseTree;
         TraversePreOrder(parseTree,"","",root);
@@ -150,13 +99,7 @@ public:
     }
 
 
-
-
 };
-
-
-
-
 
 
 

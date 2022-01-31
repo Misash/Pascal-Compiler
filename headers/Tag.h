@@ -65,7 +65,10 @@ X(RECORD ,"RECORD" , "record") \
 X(TYPE ,"TYPE" , "type") \
 X(STRING ,"STRING" , "string") \
 X(INTEGER ,"INTEGER" , "integer") \
-X(REAL ,"REAL" , "real")   \
+X(REAL ,"REAL" , "real")      \
+X(V_STRING ,"V_STRING" , "v_string") \
+X(V_INTEGER ,"V_INTEGER" , "v_integer") \
+X(V_REAL ,"V_REAL" , "v_real") \
 X(ID ,"ID" , "id")   \
 X(FINAL,"$" , "$")    \
 X(EMPTY,"e" , "e")  \

@@ -143,14 +143,14 @@ public:
         if(peek == 'e' && !file.eof() && ( peek_Char() == '+' || peek_Char() == '-' || isNumberic(peek_Char()))){
             num += peek; get_char(); num += peek; get_char();
             consume_Numbers(num);
-            return createToken(REAL , num);
+            return createToken(V_REAL , num);
         }
     }
 
     Token* get_Number(){
         string num = "";
         consume_scientificNotation(num);
-        if(  peek != '.' || ( peek == '.' && peek_Char() == '.') ) return createToken(INTEGER, num);
+        if(  peek != '.' || ( peek == '.' && peek_Char() == '.') ) return createToken(V_INTEGER, num);
         num += peek; get_char();
         consume_scientificNotation(num);
         return createToken(REAL,num);
@@ -184,7 +184,7 @@ public:
                 get_char();
             }else if(peek == '\'' && peek_Char() != '\''){
                 get_char();
-                return createToken(STRING,txt);
+                return createToken(V_STRING,txt);
             }
 
             txt += peek;

@@ -48,7 +48,6 @@ public:
     }
 
 
-
     void match( int token_type,Node* parent ){
         if(token == tokens.end()) return;
         if( ct == token_type){
@@ -60,6 +59,101 @@ public:
             cout<<"\n >Syntatic error : Expected token "<<tag_name[token_type];
         }
     }
+
+
+    void Program(Node* node){
+        if(token == tokens.end()) return;
+        if(ct == PROGRAM){
+            match(PROGRAM,node);
+            match(ID,node);
+            match(SEMICOLON,node);
+            ConstBlock(tree->insert("<ConstBlock>",node));
+            MainCode(tree->insert("<MainCode>",node));
+        }
+
+    }
+
+    void MainCode(Node* node){
+        if(token == tokens.end()) return;
+        if(ct == BEGIN){
+            match(BEGIN,node);
+            StatementList(tree->insert("<StatementList>",node));
+            match(END,node);
+            match(DOT,node);
+        }
+    }
+
+    void ConstBlock(Node* node){
+        if(token == tokens.end()) return;
+        if(ct == CONST){
+            match(CONST,node);
+            ConstList(tree->insert("<ConstList>",node));
+        }
+    }
+
+    void ConstList(Node* node){
+        if(token == tokens.end()) return;
+        if(ct == ID){
+            match(ID,node);
+            match(EQ,node);
+            Value(tree->insert("<Value>",node));
+            match(SEMICOLON,node);
+            ConstList(tree->insert("<ConstList>",node));
+        }
+    }
+
+
+    void VarBlock(Node* node){
+        if(token == tokens.end()) return;
+        if(ct == VAR){
+            match(VAR,node);
+            VarList(tree->insert("<VarList>",node));
+        }
+    }
+
+    void VarList(Node* node){
+        if(token == tokens.end()) return;
+        if(ct == ID){
+            VarDecl(tree->insert("<VarDecl>",node));
+            match(COLON,node);
+            Type(tree->insert("<Type>",node));
+            match(SEMICOLON,node);
+            VarList(tree->insert("<VarList>",node));
+        }
+    }
+
+    void VarDecl(Node* node){
+        if(token == tokens.end()) return;
+        if(ct == ID){
+            match(ID,node);
+            _VarDecl(tree->insert("<VarDecl'>",node));
+        }
+    }
+
+    void _VarDecl(Node* node){
+        if(token == tokens.end()) return;
+        if(ct == COMMA){
+            match(COMMA,node);
+            VarDecl(tree->insert("<VarDecl>",node));
+        }
+    }
+
+    void Type(Node* node){
+        if(token == tokens.end()) return;
+        if( ct == STRING || ct== REAL || ct == INTEGER){
+            match(ct,node);
+        }
+    }
+
+    void StatementList(Node *){
+
+    }
+
+
+
+
+
+
 
 
     void Assign(Node *node){
@@ -79,7 +173,7 @@ public:
             Expr(tree->insert("<Expr>",node));
             _Expr(tree->insert("<Expr'>",node));
         }
-        else if( ct == ID || ct == OPEN_PAREN || ct == STRING || ct == REAL || ct == INTEGER ){
+        else if( ct == ID || ct == OPEN_PAREN || ct == V_STRING || ct== V_REAL || ct == V_INTEGER ){
             Expr2(tree->insert("<Expr2>",node));
             _Expr(tree->insert("<Expr'>",node));
         }
@@ -99,7 +193,7 @@ public:
 
     void Expr2(Node* node){
         if(token == tokens.end()) return;
-        if( ct == ID || ct == OPEN_PAREN || ct == STRING || ct == REAL || ct == INTEGER ){
+        if( ct == ID || ct == OPEN_PAREN || ct == V_STRING || ct== V_REAL || ct == V_INTEGER ){
             Expr3(tree->insert("<Expr3>",node));
             _Expr2(tree->insert("<Expr2'>",node));
         }
@@ -120,7 +214,7 @@ public:
 
     void Expr3(Node* node){
         if(token == tokens.end()) return;
-        if(ct == ID || ct == OPEN_PAREN || ct == STRING || ct == REAL || ct == INTEGER ){
+        if(ct == ID || ct == OPEN_PAREN || ct == V_STRING || ct== V_REAL || ct == V_INTEGER ){
             Term(tree->insert("<Term>",node));
             _Expr3(tree->insert("<Expr3'>",node));
         }
@@ -139,14 +233,14 @@ public:
             _Expr3(tree->insert("<Expr3'>",node));
         }
 //        else if(ct == SEMICOLON || ct == AND || ct == OR || ct == CLOSE_PAREN || ct == EQ || ct == NE || ct == LT || ct == LE || ct == GE || ct == GT){
-//            match(ct);
+//            match(EMPTY,node);
 //        }
     }
 
 
     void Term(Node* node){
         if(token == tokens.end()) return;
-        if(ct == ID || ct == OPEN_PAREN || ct == STRING || ct == REAL || ct == INTEGER ){
+        if(ct == ID || ct == OPEN_PAREN || ct == V_STRING || ct== V_REAL || ct == V_INTEGER ){
             Factor(tree->insert("<Factor>",node));
             _Term(tree->insert("<Term'>",node));
         }
@@ -169,7 +263,7 @@ public:
         if(ct == ID  ){
             match(ct,node);
         }
-        else if( ct == STRING || ct == REAL || ct == INTEGER ){
+        else if( ct == V_STRING || ct== V_REAL || ct == V_INTEGER ){
             Value(tree->insert("<Value>",node));
         }
         else if( ct == OPEN_PAREN ){
@@ -195,7 +289,7 @@ public:
 
     void Value(Node* node){
         if(token == tokens.end()) return;
-        if( ct == STRING || ct== REAL || ct == INTEGER){
+        if( ct == V_STRING || ct== V_REAL || ct == V_INTEGER){
             match(ct,node);
         }
     }

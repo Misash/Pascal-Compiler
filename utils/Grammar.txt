@@ -2,7 +2,56 @@
  // LL(1) grammar ('' is ε):
 
 
+Program -> program id ; ConstBlock VarBlock MainCode
 
+MainCode -> begin StatementList end .
+
+ConstBlock -> const ConstList
+ConstBlock -> ''
+
+ConstList -> id = Value ; ConstList
+ConstList -> ''
+
+VarBlock -> var VarList
+VarBlock -> ''
+
+VarList -> VarDecl : Type ; VarList
+VarList -> ''
+
+
+VarDecl -> id VarDecl’
+VarDecl’ -> , VarDecl
+VarDecl’ -> ''
+
+Type -> string
+Type -> real
+Type -> int
+
+StatementList -> Statement StatementList’
+StatementList’ -> StatementList
+StatementList’ -> ''
+
+Statement -> ForStatement
+Statement -> IfStatement
+Statement -> Assign
+Statement -> WriteLn
+Statement -> Write
+Statement -> break
+Statement -> continue
+
+BlockStatement -> begin StatementList end
+
+ForStatement -> for id := Value To Expr do BlockStatement ;
+
+IfStatement -> if ( BooleanExpr ) then BlockStatement IfStatement’
+IfStatement’ -> ;
+IfStatement’ -> else BlockStatement ;
+
+
+WriteLn -> writeln ( string )
+Write -> write ( Expr )
+To -> to
+To -> downto
 
 Assign -> id := Expr ;
 
@@ -44,9 +93,9 @@ BooleanOp -> and
 BooleanOp -> or
 
 
-Value -> string
-Value -> real
-Value -> int
+Value -> v_string
+Value -> v_real
+Value -> v_int
 
 
 
