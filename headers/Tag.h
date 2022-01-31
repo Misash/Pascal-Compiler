@@ -56,6 +56,9 @@ X(CONST ,"CONST" , "const") \
 X(FILE_ ,"FILE_" , "file") \
 X(LABEL ,"LABEL" , "label") \
 X(PROGRAM ,"PROGRAM" , "program") \
+X(BREAK ,"BREAK" , "break")  \
+X(CONTINUE ,"CONTINUE" , "continue")  \
+X(WRITE,"WRITE" , "write")  \
 X(TO ,"TO" , "to") \
 X(WITH ,"WITH" , "with") \
 X(DO ,"DO" , "do") \

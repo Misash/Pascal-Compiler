@@ -145,14 +145,121 @@ public:
         }
     }
 
-    void StatementList(Node *){
+    void StatementList(Node* node){
+        if(token == tokens.end()) return;
+        if(ct == BREAK || ct == CONTINUE || ct == FOR || ct == IF || ct == ID || ct == WRITE || ct ==  WRITELN){
+           Statement(tree->insert("<Statement>",node));
+           _StatementList(tree->insert("<StatementList'>",node));
+        }
+    }
+
+    void _StatementList(Node* node){
+        if(token == tokens.end()) return;
+        if(ct == BREAK || ct == CONTINUE || ct == FOR || ct == IF || ct == ID || ct == WRITE || ct ==  WRITELN){
+            StatementList(tree->insert("<StatementList>",node));
+        }
 
     }
 
+    void Statement(Node* node){
+        if(token == tokens.end()) return;
+        if(  ct == FOR ){
+            ForStatement(tree->insert("<ForStatement>",node));
+        }
+        else if(  ct == IF ){
+            IfStatement(tree->insert("<IfStatement>",node));
+        }
+        else if(  ct == ID ){
+            Assign(tree->insert("<Assign>",node));
+        }
+        else if(ct == WRITELN){
+            WriteLn(tree->insert("<WriteLn>",node));
+        }
+        else if(ct == WRITE){
+            Write(tree->insert("<Write>",node));
+        }
+        else if(ct == BREAK || ct == CONTINUE){
+            match(ct,node);
+        }
+    }
+
+    void BlockStatement(Node* node){
+        if(token == tokens.end()) return;
+        if(ct == BEGIN){
+            match(BEGIN,node);
+            StatementList(tree->insert("<StatementList>",node));
+            match(END,node);
+        }
+    }
+
+    void ForStatement(Node* node){
+        if(token == tokens.end()) return;
+        if(ct == FOR){
+            match(FOR,node);
+            match(ID,node);
+            match(ASSIGN,node);
+            Value(tree->insert("<Value>",node));
+            To(tree->insert("<To>",node));
+            Expr(tree->insert("<Expr>",node));
+            match(DO,node);
+            BlockStatement(tree->insert("<BlockStatement>",node));
+            match(SEMICOLON,node);
+        }
+    }
+
+    void IfStatement(Node* node){
+        if(token == tokens.end()) return;
+        if(ct == IF){
+            match(IF,node);
+            match(OPEN_PAREN,node);
+            Expr(tree->insert("<Expr>",node));
+            match(CLOSE_PAREN,node);
+            match(THEN,node);
+            BlockStatement(tree->insert("<BlockStatement>",node));
+            _IfStatemen(tree->insert("<IfStatement'>",node));
+        }
+    }
+
+    void _IfStatemen(Node* node){
+        if(token == tokens.end()) return;
+        if( ct == ELSE){
+            match(ELSE,node);
+            BlockStatement(tree->insert("<BlockStatement>",node));
+            match(SEMICOLON,node);
+        }
+        else if(ct == SEMICOLON){
+            match(SEMICOLON,node);
+        }
+    }
+
+    void WriteLn(Node* node){
+        if(token == tokens.end()) return;
+        if(ct == WRITELN){
+            match(WRITELN,node);
+            match(OPEN_PAREN,node);
+            match(V_STRING,node);
+            match(CLOSE_PAREN,node);
+        }
+    }
 
 
+    void Write(Node* node){
+        if(token == tokens.end()) return;
+        if(ct == WRITE){
+            match(WRITE,node);
+            match(OPEN_PAREN,node);
+            Expr(tree->insert("<Expr>",node));
+            match(CLOSE_PAREN,node);
+        }
+    }
 
 
+    void To(Node* node){
+        if(token == tokens.end()) return;
+        if(ct == TO || ct == DOWNTO){
+            match(ct,node);
+        }
+    }
 
 
 
@@ -308,9 +415,9 @@ public:
 
 //        program();
 
-        tree->root = new Node("<Assign>");
-        Assign(tree->root);
-//        cout<<"\n\ngraphic:\n";
+        tree->root = new Node("<Program>");
+        Program(tree->root);
+        cout<<"\n\ngraphic:\n";
         tree->print();
 
     }
@@ -326,77 +433,6 @@ int main(){
     Parser p;
 
     p.parseTokens();
-
-
-
-
-
-//    Scanner lexer;
-//
-//    lexer.get_tokens();
-//
-//    print ERRORS
-//
-//    for (int i = 0; i < lexer.errors.size(); ++i) {
-//        cout<<"\n"<<lexer.errors[i]->message;
-//    }
-//
-//    cout<<"\n";
-//
-//    //print TOKENS
-//    for (int i = 0; i < lexer.tokens.size() ; ++i) {
-//        cout <<"\n < " <<  getNameTag(lexer.tokens[i]->type)
-//             <<" , \'" << lexer.tokens[i]->value<<"\'  >";
-//    }
-
-
-//    ParseTree t;
-//
-//    vector<string> v;
-//
-//
-//
-//    vector<string> v2 = {"<id>" , ":=" , "<expr>"};
-//    t.insert("<assign>",&v2);
-//
-//
-//
-//    vector<string> v3 = {"<id>" , "*" , "<expr>"};
-//    t.insert("<expr>",&v3);
-//
-//
-//    vector<string> v4 = {"A"};
-//    t.insert("<id>",&v4);
-//
-//
-//
-//
-//    vector<string> v5 = {"C"};
-//    t.insert("<id>",&v5);
-//
-//
-//
-//    vector<string> v6 = {"<expr>"};
-//    t.insert("<expr>",&v6);
-//
-//    t.insert("<expr>",&v3);
-//
-//
-//
-//
-//    cout<<"\n\nGRAFICO:\n\n";
-//    t.print();
-//
-//
-//    cout<<"\n\nproduccion:\n";
-//    t.printResul();
-//
-//
-
-
-
-
-
 
 
 }
