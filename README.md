@@ -11,6 +11,7 @@ this compiler includes the following parts:
 - Error : class with attributes line , line_row and message
 - Token : Class with token value and token type
 
+
 ## Installation
 
 Install my-project with g++ >=9.3.0  and GNU Make >=4.2.1
@@ -45,8 +46,8 @@ Go to the project directory
 Execute the Scanner  with g++
 
 ```bash
-  cd scanner/
-  g++ Scanner.cpp -o myprog && ./myprog
+  cd scr/
+  g++ parser.cpp -o myprog && ./myprog
 ```
 
 Execute the Scanner  with Makefile
@@ -56,7 +57,6 @@ Execute the Scanner  with Makefile
 ```
 
 Clean object code
-
 ```bash
   make clean
 ```

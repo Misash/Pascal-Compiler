@@ -1,14 +1,14 @@
 
 TARGET = myprog
 CLFAGS = -Wall
-CPROGRAM = Scanner.cpp
+CPROGRAM = parser.cpp
 
 run:
-	@ cd scanner/ && g++ $(CPROGRAM) -o $(TARGET) && ./$(TARGET)
+	@ cd src/ && g++ $(CPROGRAM) -o $(TARGET) && ./$(TARGET)
 
 
 .PHONY: clean
 clean:
-	@ cd scanner/ && rm -f *.o  $(TARGET)
+	@ cd src/ && rm -f *.o  $(TARGET)
 
-#g++ parser.cpp -o pro && ./pro
+
