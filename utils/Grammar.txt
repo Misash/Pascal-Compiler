@@ -40,8 +40,10 @@ Statement -> break
 Statement -> continue
 
 BlockStatement -> begin StatementList end
+BlockStatement -> StatementList //new
 
 ForStatement -> for id := Value To Expr do BlockStatement ;
+
 
 IfStatement -> if ( Expr ) then BlockStatement IfStatement’
 IfStatement’ -> ;

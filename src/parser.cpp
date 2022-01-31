@@ -20,6 +20,7 @@ public:
     TokenIter token;
     vector<Token*> tokens;
     ParseTree * tree;
+    string errors;
 
 
     Parser(){
@@ -27,10 +28,9 @@ public:
         Scanner lexer;
         lexer.get_tokens();
         tokens = lexer.tokens;
-
         token = tokens.begin();
-
         tree = new ParseTree();
+        errors = "";
     }
 
 
@@ -53,10 +53,15 @@ public:
         if( ct == token_type){
             string nameType = tag_value[token_type];
             cout<<nameType<<" ";
+            if(ct == SEMICOLON) cout<<"\n";
             tree->insert(nameType,parent);
             scanToken();
         }else{
-            cout<<"\n >Syntatic error : Expected token "<<tag_name[token_type];
+            string tagName = tag_name[token_type];
+            string lastTagName = tag_name[(*(token))->type];
+            errors += "\n >Syntatic error : Expected token " + tagName ;
+            cout<<"\n > Syntatic error [token: "+ lastTagName +"] : Expected token " + tagName + " "<<parent->Value<<endl;
+//            cout<<"\n > Syntatic error : Expected token " + tagName + "\n";
         }
     }
 
@@ -68,6 +73,7 @@ public:
             match(ID,node);
             match(SEMICOLON,node);
             ConstBlock(tree->insert("<ConstBlock>",node));
+            VarBlock(tree->insert("<VarBlock>",node));
             MainCode(tree->insert("<MainCode>",node));
         }
 
@@ -190,6 +196,9 @@ public:
             StatementList(tree->insert("<StatementList>",node));
             match(END,node);
         }
+        else if(ct == BREAK || ct == CONTINUE || ct == FOR || ct == IF || ct == ID || ct == WRITE || ct ==  WRITELN){
+            StatementList(tree->insert("<StatementList>",node));
+        }
     }
 
     void ForStatement(Node* node){
@@ -216,11 +225,11 @@ public:
             match(CLOSE_PAREN,node);
             match(THEN,node);
             BlockStatement(tree->insert("<BlockStatement>",node));
-            _IfStatemen(tree->insert("<IfStatement'>",node));
+            _IfStatement(tree->insert("<IfStatement'>",node));
         }
     }
 
-    void _IfStatemen(Node* node){
+    void _IfStatement(Node* node){
         if(token == tokens.end()) return;
         if( ct == ELSE){
             match(ELSE,node);
@@ -411,14 +420,11 @@ public:
                  <<" , \'" << tokens[i]->value<<"\'  >";
         }
 
-        cout<<"\n\nPARSER:";
-
-//        program();
+        cout<<"\n\nBNF:\n";
 
         tree->root = new Node("<Program>");
         Program(tree->root);
-        cout<<"\n\ngraphic:\n";
-        tree->print();
+
 
     }
 
@@ -433,6 +439,11 @@ int main(){
     Parser p;
 
     p.parseTokens();
+
+//    cout<<"\n\nERRORS:\n";
+//    cout<<p.errors;
+    cout<<"\n\ngraphic:\n";
+    p.tree->print();
 
 
 }
