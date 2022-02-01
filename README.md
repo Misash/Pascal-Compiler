@@ -6,10 +6,8 @@ Simplified pascal compiler developed during the Compilers course
 
 this compiler includes the following parts:
 
-- scanner: Read the test/main.pas and storage errors and tokens
-- TAGS : Is a Xmacros  to have a compile-time access to the tags
-- Error : class with attributes line , line_row and message
-- Token : Class with token value and token type
+- Scanner: Read the pascal code  and storage errors and tokens
+- Parser : Parse tokens into logical syntax components, returning a parse tree
 
 
 ## Installation

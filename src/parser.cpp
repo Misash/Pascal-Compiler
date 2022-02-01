@@ -302,9 +302,6 @@ public:
             Expr2(tree->insert("<Expr2>",node));
             _Expr(tree->insert("<Expr'>",node));
         }
-//        else if(ct == SEMICOLON || ct == AND || ct == OR || ct == CLOSE_PAREN){
-//            match(ct);
-//        }
     }
 
     void Expr2(Node* node){
@@ -323,9 +320,6 @@ public:
             Expr3(tree->insert("<Expr3>",node));
             _Expr2(tree->insert("<Expr2'>",node));
         }
-//        else if(ct == SEMICOLON || ct == AND || ct == OR ){
-//            match(ct);
-//        }
     }
 
     void Expr3(Node* node){
@@ -348,9 +342,6 @@ public:
             Term(tree->insert("<Term>",node));
             _Expr3(tree->insert("<Expr3'>",node));
         }
-//        else if(ct == SEMICOLON || ct == AND || ct == OR || ct == CLOSE_PAREN || ct == EQ || ct == NE || ct == LT || ct == LE || ct == GE || ct == GT){
-//            match(EMPTY,node);
-//        }
     }
 
 
@@ -369,9 +360,6 @@ public:
             Factor(tree->insert("<Factor>",node));
             _Term(tree->insert("<Term'>",node));
         }
-//        else if(ct == SEMICOLON || ct == AND || ct == OR || ct == CLOSE_PAREN || ct == EQ || ct == NE || ct == LT || ct == LE || ct == GE || ct == GT){
-//            match(ct);
-//        }
     }
 
     void Factor(Node* node){
