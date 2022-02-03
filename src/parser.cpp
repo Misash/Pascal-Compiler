@@ -421,17 +421,17 @@ public:
 
 
 
-int main(){
-
-
-    Parser p;
-
-    p.parseTokens();
-
-//    cout<<"\n\nERRORS:\n";
-//    cout<<p.errors;
-    cout<<"\n\ngraphic:\n";
-    p.tree->print();
-
-
-}
+//int main(){
+//
+//
+//    Parser p;
+//
+//    p.parseTokens();
+//
+////    cout<<"\n\nERRORS:\n";
+////    cout<<p.errors;
+////    cout<<"\n\ngraphic:\n";
+////    p.tree->print();
+//
+//
+//}

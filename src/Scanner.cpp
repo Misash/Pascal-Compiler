@@ -108,7 +108,7 @@ public:
     }
 
     Token* createToken(int type , string value){
-        Token* tkn = new Token(type , value);
+        Token* tkn = new Token(type , value,line , line_row);
         return tkn;
     }
 
@@ -121,11 +121,11 @@ public:
         if (check_double_Token(peek)) {
             tokenValue += peek;
             tokenValue += peek_Char();
-            token_ptr = new Token(getTypeTag(tokenValue), tokenValue);
+            token_ptr = new Token(getTypeTag(tokenValue), tokenValue,line,line_row);
             get_char();
         } else{
             tokenValue += peek;
-            token_ptr = new Token(getTypeTag(tokenValue), tokenValue);
+            token_ptr = new Token(getTypeTag(tokenValue), tokenValue,line,line_row);
         }
         get_char();
         return token_ptr;
@@ -247,28 +247,28 @@ public:
 
 };
 
-//int main(){
-//
-//    Scanner lexer;
-//
-//    lexer.run();
-//
-//    //print ERRORS
-//
-//    for (int i = 0; i < lexer.errors.size(); ++i) {
-//        cout<<"\n"<<lexer.errors[i]->message;
-//    }
-//
-//    cout<<"\n";
-//
-//    //print TOKENS
-//    for (int i = 0; i < lexer.tokens.size() ; ++i) {
-//        cout <<"\n < " <<  getNameTag(lexer.tokens[i]->type)
-//             <<" , \'" << lexer.tokens[i]->value<<"\'  >";
-//    }
-//
-//
-//}
+int main(){
+
+    Scanner lexer;
+
+    lexer.get_tokens();
+
+    //print ERRORS
+
+    for (int i = 0; i < lexer.errors.size(); ++i) {
+        cout<<"\n"<<lexer.errors[i]->message;
+    }
+
+    cout<<"\n";
+
+    //print TOKENS
+    for (int i = 0; i < lexer.tokens.size() ; ++i) {
+        cout <<"\n ( "<<lexer.tokens[i]->line<<" : "<<lexer.tokens[i]->line_row<<" ) < " <<  getNameTag(lexer.tokens[i]->type)
+             <<" , \'" << lexer.tokens[i]->value<<"\'  >";
+    }
+
+
+}
 
 
 

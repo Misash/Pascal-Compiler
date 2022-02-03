@@ -19,12 +19,17 @@ struct Error {
 
 class Token{
 public:
+
+    int line , line_row;
     int type;
     std::string value;
-    Token(int type,std::string value){
+    Token(int type,std::string value,int line , int line_row){
         this->value = value;
         this->type = type;
+        this->line = line;
+        this->line_row = line_row;
     }
+
 };
 
 #endif //COMPILATOR_TOKEN_H
