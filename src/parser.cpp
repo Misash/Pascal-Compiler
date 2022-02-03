@@ -19,8 +19,10 @@ public:
 
     TokenIter token;
     vector<Token*> tokens;
+    vector<Token*> errors;
     ParseTree * tree;
-    string errors;
+
+
 
 
     Parser(){
@@ -30,7 +32,6 @@ public:
         tokens = lexer.tokens;
         token = tokens.begin();
         tree = new ParseTree();
-        errors = "";
     }
 
 
@@ -59,7 +60,7 @@ public:
         }else{
             string tagName = tag_name[token_type];
             string lastTagName = tag_name[(*(token))->type];
-            errors += "\n >Syntatic error : Expected token " + tagName ;
+            string e = "\n >Syntatic error : Expected token " + tagName ;
             cout<<"\n > Syntatic error [token: "+ lastTagName +"] : Expected token " + tagName + " "<<parent->Value<<endl;
 //            cout<<"\n > Syntatic error : Expected token " + tagName + "\n";
         }

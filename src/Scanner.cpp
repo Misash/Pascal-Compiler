@@ -19,6 +19,7 @@ public:
     char peek = ' ';
     int line = 1;
     int line_row = 1;
+    string line_progress = "";
     string line_context = "";
     vector<Token*> tokens;
     vector<Error*> errors;
@@ -32,8 +33,14 @@ public:
 
     string get_char(){
         // consume and return the next char
-        if(peek != '\n') line_row++;
-        else line_row = 1;
+        if(peek != '\n') {
+            line_row++;
+            line_progress += peek;
+        }
+        else {
+            line_row = 1;
+            line_progress = "";
+        }
         file.get(peek);
         return to_string(peek);
     }
@@ -156,6 +163,14 @@ public:
         return createToken(REAL,num);
     }
 
+    string printLocalizer(int size){
+        string res;
+        for (int i = 0; i < size ; ++i)
+            res += (i == size - 1)? '^' : ' ';
+        return res;
+    }
+
+
     Token* get_KeyWord_or_ID(){
         string name;
         do{
@@ -164,6 +179,11 @@ public:
         }while(isLetter(peek) || isNumberic(peek));
 
         if(peek == '@' || peek == '#' || peek == '%' || peek == '_' || peek == '&'){
+            string message = "PascalCompiler: (" + to_string(line) + " : " + to_string(line_row)+ ") Error: Appearance of illegal character " ;
+            message += "\n\t" + to_string(line) + "|" + line_progress + peek;
+            message += "\n\t" + printLocalizer(line_progress.size() + 1)  ;
+            Error* error_ptr = new Error(line,line_row ,message);
+            errors.push_back(error_ptr);
             return 0;
         }
 
@@ -235,9 +255,6 @@ public:
             if( token_ptr){
                 tokens.push_back(token_ptr);
             }else if(!file.eof()){
-                string message = "Error: reading Token ""at line " + to_string(line) + " and  row " + to_string(line_row);
-                error_ptr = new Error(line,line_row ,message);
-                errors.push_back(error_ptr);
                 get_char();
             }
 

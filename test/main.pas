@@ -15,7 +15,7 @@ begin
             break ;
       end;
 
-      if(j = i) then
+      if(j_ = i) then
          writeln( ' is prime' ) ;
    end;
 end.
