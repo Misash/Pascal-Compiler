@@ -19,10 +19,10 @@ public:
 
     TokenIter token;
     vector<Token*> tokens;
-    vector<Token*> errors;
+    vector<Error*> errors;
     ParseTree * tree;
-
-
+    vector<string> linesCode;
+    string fileDir;
 
 
     Parser(){
@@ -30,6 +30,8 @@ public:
         Scanner lexer;
         lexer.get_tokens();
         tokens = lexer.tokens;
+        errors = lexer.errors;
+        fileDir = lexer.fileDir;
         token = tokens.begin();
         tree = new ParseTree();
     }
@@ -49,20 +51,46 @@ public:
     }
 
 
+    string declarationAtLine(int line){
+        ifstream file;
+        file.open(fileDir,ios::in);
+        file.seekg(0,ios::beg);
+        string sentence;
+
+        while(line --){
+            getline(file, sentence);
+        }
+        file.close();
+
+        return sentence;
+    }
+
+    string printLocalizer(int size){
+        string res;
+        for (int i = 0; i < size ; ++i)
+            res += (i == size - 1)? '^' : ' ';
+        return res;
+    }
+
+
+
     void match( int token_type,Node* parent ){
         if(token == tokens.end()) return;
         if( ct == token_type){
             string nameType = tag_value[token_type];
-            cout<<nameType<<" ";
-            if(ct == SEMICOLON) cout<<"\n";
+//            cout<<nameType<<" ";
+//            if(ct == SEMICOLON) cout<<"\n";
             tree->insert(nameType,parent);
             scanToken();
         }else{
-            string tagName = tag_name[token_type];
-            string lastTagName = tag_name[(*(token))->type];
-            string e = "\n >Syntatic error : Expected token " + tagName ;
-            cout<<"\n > Syntatic error [token: "+ lastTagName +"] : Expected token " + tagName + " "<<parent->Value<<endl;
-//            cout<<"\n > Syntatic error : Expected token " + tagName + "\n";
+            string tagValue = tag_value[token_type];
+            string message = "Expected \'" + tagValue  + "\' at declaration " ;
+            token --;
+            message += "\n\t" + declarationAtLine((*token)->line );
+            message += "\n\t" + printLocalizer((*token)->line_row+1)  ;
+            Error* error_ptr = new Error((*token)->line,(*token)->line_row  ,message);
+            token++;
+            errors.push_back(error_ptr);
         }
     }
 
@@ -404,12 +432,11 @@ public:
     void parseTokens(){
 
         //print TOKENS
-        for (int i = 0; i < tokens.size() ; ++i) {
-            cout <<"\n < " <<  getNameTag(tokens[i]->type)
-                 <<" , \'" << tokens[i]->value<<"\'  >";
-        }
+//        for (int i = 0; i < tokens.size() ; ++i) {
+//            cout <<"\n < " <<  getNameTag(tokens[i]->type)
+//                 <<" , \'" << tokens[i]->value<<"\'  >";
+//        }
 
-        cout<<"\n\nBNF:\n";
 
         tree->root = new Node("<Program>");
         Program(tree->root);
@@ -422,17 +449,20 @@ public:
 
 
 
-//int main(){
-//
-//
-//    Parser p;
-//
-//    p.parseTokens();
-//
-////    cout<<"\n\nERRORS:\n";
-////    cout<<p.errors;
-////    cout<<"\n\ngraphic:\n";
-////    p.tree->print();
-//
-//
-//}
+int main(){
+
+
+    Parser p;
+    p.parseTokens();
+
+    if(p.errors.size()){
+        for (int i = 0; i < p.errors.size(); ++i) {
+            cout<<"\n"<<p.errors[i]->message;
+        }
+        return 0;
+    }
+
+    p.tree->print();
+
+
+}

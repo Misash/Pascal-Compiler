@@ -3,7 +3,7 @@
 #define COMPILATOR_TOKEN_H
 
 #include <string>
-
+using namespace  std;
 
 struct Error {
     int line , line_row ;
@@ -11,8 +11,9 @@ struct Error {
     Error( int line , int line_row  , std::string message){
         this->line = line;
         this->line_row = line_row;
-        this->message = message;
+        this->message = "PascalCompiler: (" + to_string(line) + " : " + to_string(line_row)+ ") Error: " + message;
     }
+
 
 };
 

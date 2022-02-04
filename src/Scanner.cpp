@@ -179,8 +179,8 @@ public:
         }while(isLetter(peek) || isNumberic(peek));
 
         if(peek == '@' || peek == '#' || peek == '%' || peek == '_' || peek == '&'){
-            string message = "PascalCompiler: (" + to_string(line) + " : " + to_string(line_row)+ ") Error: Appearance of illegal character " ;
-            message += "\n\t" + to_string(line) + "|" + line_progress + peek;
+            string message = "Appearance of illegal character " ;
+            message += "\n\t"  + line_progress + peek;
             message += "\n\t" + printLocalizer(line_progress.size() + 1)  ;
             Error* error_ptr = new Error(line,line_row ,message);
             errors.push_back(error_ptr);
@@ -264,29 +264,29 @@ public:
 
 };
 
-int main(){
-
-    Scanner lexer;
-
-    lexer.get_tokens();
-
-    //print ERRORS
-
-    for (int i = 0; i < lexer.errors.size(); ++i) {
-        cout<<"\n"<<lexer.errors[i]->message;
-    }
-
-    cout<<"\n";
-
-    //print TOKENS
-    for (int i = 0; i < lexer.tokens.size() ; ++i) {
-        cout <<"\n ( "<<lexer.tokens[i]->line<<" : "<<lexer.tokens[i]->line_row<<" ) < " <<  getNameTag(lexer.tokens[i]->type)
-             <<" , \'" << lexer.tokens[i]->value<<"\'  >";
-    }
-
-
-}
-
-
+//int main(){
+//
+//    Scanner lexer;
+//
+//    lexer.get_tokens();
+//
+//    //print ERRORS
+//
+//    for (int i = 0; i < lexer.errors.size(); ++i) {
+//        cout<<"\n"<<lexer.errors[i]->message;
+//    }
+//
+//    cout<<"\n";
+//
+//    //print TOKENS
+//    for (int i = 0; i < lexer.tokens.size() ; ++i) {
+//        cout <<"\n ( "<<lexer.tokens[i]->line<<" : "<<lexer.tokens[i]->line_row<<" ) < " <<  getNameTag(lexer.tokens[i]->type)
+//             <<" , \'" << lexer.tokens[i]->value<<"\'  >";
+//    }
+//
+//
+//}
+//
+//
 
 
