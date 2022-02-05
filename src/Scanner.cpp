@@ -176,9 +176,9 @@ public:
         do{
             name += peek;
             get_char();
-        }while(isLetter(peek) || isNumberic(peek));
+        }while(isLetter(peek) || isNumberic(peek) || peek == '_');
 
-        if(peek == '@' || peek == '#' || peek == '%' || peek == '_' || peek == '&'){
+        if(peek == '@' || peek == '#' || peek == '%' || peek == '&'){
             string message = "Appearance of illegal character " ;
             message += "\n\t"  + line_progress + peek;
             message += "\n\t" + printLocalizer(line_progress.size() + 1)  ;
@@ -211,6 +211,11 @@ public:
             get_char();
         }
         if(peek == '\n'){
+            string message = "String exceeds line " ;
+            message += "\n\t"  + line_progress + peek;
+            message += "\n\t" + printLocalizer(line_progress.size() + 1)  ;
+            Error* error_ptr = new Error(line,line_row ,message);
+            errors.push_back(error_ptr);
             return 0;
         }
     }

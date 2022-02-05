@@ -78,13 +78,13 @@ public:
         if(token == tokens.end()) return;
         if( ct == token_type){
             string nameType = tag_value[token_type];
-//            cout<<nameType<<" ";
-//            if(ct == SEMICOLON) cout<<"\n";
+            cout<<nameType<<" ";
+            if(ct == SEMICOLON) cout<<"\n";
             tree->insert(nameType,parent);
             scanToken();
         }else{
             string tagValue = tag_value[token_type];
-            string message = "Expected \'" + tagValue  + "\' at declaration " ;
+            string message = "Expected \'" + tagValue  + "\' at declaration "  ;
             token --;
             message += "\n\t" + declarationAtLine((*token)->line );
             message += "\n\t" + printLocalizer((*token)->line_row+1)  ;
@@ -225,9 +225,9 @@ public:
             StatementList(tree->insert("<StatementList>",node));
             match(END,node);
         }
-        else if(ct == BREAK || ct == CONTINUE || ct == FOR || ct == IF || ct == ID || ct == WRITE || ct ==  WRITELN){
-            StatementList(tree->insert("<StatementList>",node));
-        }
+//        else if(ct == BREAK || ct == CONTINUE || ct == FOR || ct == IF || ct == ID || ct == WRITE || ct ==  WRITELN){
+//            StatementList(tree->insert("<StatementList>",node));
+//        }
     }
 
     void ForStatement(Node* node){
@@ -261,6 +261,7 @@ public:
     void _IfStatement(Node* node){
         if(token == tokens.end()) return;
         if( ct == ELSE){
+            cout<<"entrooooooo";
             match(ELSE,node);
             BlockStatement(tree->insert("<BlockStatement>",node));
             match(SEMICOLON,node);
@@ -275,8 +276,9 @@ public:
         if(ct == WRITELN){
             match(WRITELN,node);
             match(OPEN_PAREN,node);
-            match(V_STRING,node);
+            Expr(tree->insert("<Expr>",node));
             match(CLOSE_PAREN,node);
+            match(SEMICOLON,node);
         }
     }
 
@@ -288,6 +290,7 @@ public:
             match(OPEN_PAREN,node);
             Expr(tree->insert("<Expr>",node));
             match(CLOSE_PAREN,node);
+            match(SEMICOLON,node);
         }
     }
 
@@ -431,30 +434,26 @@ public:
 
     void parseTokens(){
 
-        //print TOKENS
-//        for (int i = 0; i < tokens.size() ; ++i) {
-//            cout <<"\n < " <<  getNameTag(tokens[i]->type)
-//                 <<" , \'" << tokens[i]->value<<"\'  >";
-//        }
-
+//        print TOKENS
+        for (int i = 0; i < tokens.size() ; ++i) {
+            cout <<"\n < " <<  getNameTag(tokens[i]->type)
+                 <<" , \'" << tokens[i]->value<<"\'  >";
+        }
 
         tree->root = new Node("<Program>");
         Program(tree->root);
 
-
     }
-
 
 };
 
 
-
 int main(){
-
 
     Parser p;
     p.parseTokens();
 
+    cout<<"\n\n\n";
     if(p.errors.size()){
         for (int i = 0; i < p.errors.size(); ++i) {
             cout<<"\n"<<p.errors[i]->message;

@@ -34,7 +34,7 @@ X(DIV ,"DIV" , "div") \
 X(MOD ,"MOD" , "mod") \
 X(IN ,"IN" , "in")            \
 X(ARRAY ,"ARRAY" , "array")   \
-X(WRITELN,"WRITELN" ,"writeln")  \
+X(WRITELN,"WRITELN" ,"Writeln")  \
 X(DOWNTO ,"DOWNTO" , "downto") \
 X(FUNCTION ,"FUNCTION" , "function") \
 X(OF ,"OF" , "of") \
@@ -58,7 +58,7 @@ X(LABEL ,"LABEL" , "label") \
 X(PROGRAM ,"PROGRAM" , "program") \
 X(BREAK ,"BREAK" , "break")  \
 X(CONTINUE ,"CONTINUE" , "continue")  \
-X(WRITE,"WRITE" , "write")  \
+X(WRITE,"WRITE" , "Write")  \
 X(TO ,"TO" , "to") \
 X(WITH ,"WITH" , "with") \
 X(DO ,"DO" , "do") \

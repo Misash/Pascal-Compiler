@@ -50,8 +50,8 @@ IfStatement’ -> ;
 IfStatement’ -> else BlockStatement ;
 
 
-WriteLn -> writeln ( v_string )
-Write -> write ( Expr )
+WriteLn -> writeln ( Expr ) ;
+Write -> write ( Expr ) ;
 To -> to
 To -> downto
 
