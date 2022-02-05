@@ -78,8 +78,8 @@ public:
         if(token == tokens.end()) return;
         if( ct == token_type){
             string nameType = tag_value[token_type];
-            cout<<nameType<<" ";
-            if(ct == SEMICOLON) cout<<"\n";
+//            cout<<nameType<<" ";
+//            if(ct == SEMICOLON) cout<<"\n";
             tree->insert(nameType,parent);
             scanToken();
         }else{
@@ -261,7 +261,6 @@ public:
     void _IfStatement(Node* node){
         if(token == tokens.end()) return;
         if( ct == ELSE){
-            cout<<"entrooooooo";
             match(ELSE,node);
             BlockStatement(tree->insert("<BlockStatement>",node));
             match(SEMICOLON,node);
@@ -435,10 +434,10 @@ public:
     void parseTokens(){
 
 //        print TOKENS
-        for (int i = 0; i < tokens.size() ; ++i) {
-            cout <<"\n < " <<  getNameTag(tokens[i]->type)
-                 <<" , \'" << tokens[i]->value<<"\'  >";
-        }
+//        for (int i = 0; i < tokens.size() ; ++i) {
+//            cout <<"\n < " <<  getNameTag(tokens[i]->type)
+//                 <<" , \'" << tokens[i]->value<<"\'  >";
+//        }
 
         tree->root = new Node("<Program>");
         Program(tree->root);
@@ -453,7 +452,7 @@ int main(){
     Parser p;
     p.parseTokens();
 
-    cout<<"\n\n\n";
+
     if(p.errors.size()){
         for (int i = 0; i < p.errors.size(); ++i) {
             cout<<"\n"<<p.errors[i]->message;
