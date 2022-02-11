@@ -1,10 +1,14 @@
 
 program Test4;
+const num1 = 11;
+      num2 = 27;
 var
-   age : integer;
+   age : integer ; age2 : string;
 
 begin
 	age := 0;
+	age2 := 'hola mundo';
+
 	if (age < 1) then
 		begin
 			Writeln('Age cannot be less than 1...');
@@ -18,7 +22,7 @@ begin
 		age := age - 20 - 30;
 		end;
 	end;
-Write(age);
+Write(age2);
 end.
 
 

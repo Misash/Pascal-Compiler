@@ -23,7 +23,7 @@ public:
     ParseTree * tree;
     vector<string> linesCode;
     string fileDir;
-
+    string CPPCode;
 
     Parser(){
         //get tokens
@@ -74,12 +74,15 @@ public:
 
 
 
-    void match( int token_type,Node* parent ){
+    void match( int token_type,Node* parent ,string code=""){
         if(token == tokens.end()) return;
         if( ct == token_type){
             string nameType = tag_value[token_type];
-//            cout<<nameType<<" ";
-//            if(ct == SEMICOLON) cout<<"\n";
+
+            CPPCode += code;
+            cout<<nameType<<" ";
+            if(ct == SEMICOLON) cout<<"\n";
+
             tree->insert(nameType,parent);
             scanToken();
         }else{
@@ -95,6 +98,8 @@ public:
     }
 
 
+
+
     void Program(Node* node){
         if(token == tokens.end()) return;
         if(ct == PROGRAM){
@@ -104,6 +109,7 @@ public:
             ConstBlock(tree->insert("<ConstBlock>",node));
             VarBlock(tree->insert("<VarBlock>",node));
             MainCode(tree->insert("<MainCode>",node));
+            cout<<"\n\n\nFinal Code: \n\n"<<CPPCode<<"\n\n";
         }
 
     }
@@ -111,7 +117,7 @@ public:
     void MainCode(Node* node){
         if(token == tokens.end()) return;
         if(ct == BEGIN){
-            match(BEGIN,node);
+            match(BEGIN,node,"\n");
             StatementList(tree->insert("<StatementList>",node));
             match(END,node);
             match(DOT,node);
@@ -129,10 +135,10 @@ public:
     void ConstList(Node* node){
         if(token == tokens.end()) return;
         if(ct == ID){
-            match(ID,node);
-            match(EQ,node);
+            match(ID,node,"\nconst " + (*token)->value);
+            match(EQ,node," = ");
             Value(tree->insert("<Value>",node));
-            match(SEMICOLON,node);
+            match(SEMICOLON,node," ; ");
             ConstList(tree->insert("<ConstList>",node));
         }
     }
@@ -141,7 +147,7 @@ public:
     void VarBlock(Node* node){
         if(token == tokens.end()) return;
         if(ct == VAR){
-            match(VAR,node);
+            match(VAR,node,"\n");
             VarList(tree->insert("<VarList>",node));
         }
     }
@@ -152,7 +158,7 @@ public:
             VarDecl(tree->insert("<VarDecl>",node));
             match(COLON,node);
             Type(tree->insert("<Type>",node));
-            match(SEMICOLON,node);
+            match(SEMICOLON,node," ; ");
             VarList(tree->insert("<VarList>",node));
         }
     }
@@ -160,7 +166,7 @@ public:
     void VarDecl(Node* node){
         if(token == tokens.end()) return;
         if(ct == ID){
-            match(ID,node);
+            match(ID,node,"\nvar "+(*token)->value);
             _VarDecl(tree->insert("<VarDecl'>",node));
         }
     }
@@ -214,7 +220,7 @@ public:
             Write(tree->insert("<Write>",node));
         }
         else if(ct == BREAK || ct == CONTINUE){
-            match(ct,node);
+            match(ct,node , (*token)->value);
         }
     }
 
@@ -225,34 +231,34 @@ public:
             StatementList(tree->insert("<StatementList>",node));
             match(END,node);
         }
-//        else if(ct == BREAK || ct == CONTINUE || ct == FOR || ct == IF || ct == ID || ct == WRITE || ct ==  WRITELN){
-//            StatementList(tree->insert("<StatementList>",node));
-//        }
+        else if(ct == BREAK || ct == CONTINUE || ct == FOR || ct == IF || ct == ID || ct == WRITE || ct ==  WRITELN){
+            StatementList(tree->insert("<StatementList>",node));
+        }
     }
 
     void ForStatement(Node* node){
         if(token == tokens.end()) return;
         if(ct == FOR){
-            match(FOR,node);
-            match(ID,node);
-            match(ASSIGN,node);
+            match(FOR,node,"\nfor( ");
+            match(ID,node,"int i");
+            match(ASSIGN,node," = ");
             Value(tree->insert("<Value>",node));
             To(tree->insert("<To>",node));
             Expr(tree->insert("<Expr>",node));
-            match(DO,node);
+            match(DO,node," ; i++ ){\n");
             BlockStatement(tree->insert("<BlockStatement>",node));
-            match(SEMICOLON,node);
+            match(SEMICOLON,node,"\n}\n");
         }
     }
 
     void IfStatement(Node* node){
         if(token == tokens.end()) return;
         if(ct == IF){
-            match(IF,node);
-            match(OPEN_PAREN,node);
+            match(IF,node,"\nif");
+            match(OPEN_PAREN,node,"(");
             Expr(tree->insert("<Expr>",node));
-            match(CLOSE_PAREN,node);
-            match(THEN,node);
+            match(CLOSE_PAREN,node,")");
+            match(THEN,node,"{\n");
             BlockStatement(tree->insert("<BlockStatement>",node));
             _IfStatement(tree->insert("<IfStatement'>",node));
         }
@@ -261,23 +267,23 @@ public:
     void _IfStatement(Node* node){
         if(token == tokens.end()) return;
         if( ct == ELSE){
-            match(ELSE,node);
+            match(ELSE,node,"\n}\nelse{\n");
             BlockStatement(tree->insert("<BlockStatement>",node));
-            match(SEMICOLON,node);
+            match(SEMICOLON,node,"\n}\n");
         }
         else if(ct == SEMICOLON){
-            match(SEMICOLON,node);
+            match(SEMICOLON,node,"\n}\n");
         }
     }
 
     void WriteLn(Node* node){
         if(token == tokens.end()) return;
         if(ct == WRITELN){
-            match(WRITELN,node);
-            match(OPEN_PAREN,node);
+            match(WRITELN,node,"\nconsole.log");
+            match(OPEN_PAREN,node,"( ");
             Expr(tree->insert("<Expr>",node));
-            match(CLOSE_PAREN,node);
-            match(SEMICOLON,node);
+            match(CLOSE_PAREN,node," )");
+            match(SEMICOLON,node,";\n");
         }
     }
 
@@ -285,11 +291,11 @@ public:
     void Write(Node* node){
         if(token == tokens.end()) return;
         if(ct == WRITE){
-            match(WRITE,node);
-            match(OPEN_PAREN,node);
+            match(WRITE,node,"\nconsole.log");
+            match(OPEN_PAREN,node,"( ");
             Expr(tree->insert("<Expr>",node));
-            match(CLOSE_PAREN,node);
-            match(SEMICOLON,node);
+            match(CLOSE_PAREN,node," )");
+            match(SEMICOLON,node,";\n");
         }
     }
 
@@ -297,7 +303,7 @@ public:
     void To(Node* node){
         if(token == tokens.end()) return;
         if(ct == TO || ct == DOWNTO){
-            match(ct,node);
+            match(ct,node , "; i < ");
         }
     }
 
@@ -306,17 +312,17 @@ public:
     void Assign(Node *node){
         if(token == tokens.end()) return;
         if( ct == ID ){
-            match(ID,node);
-            match(ASSIGN, node);
+            match(ID,node,"\n" + (*token)->value);
+            match(ASSIGN, node," = ");
             Expr(tree->insert("<Expr>",node));
-            match(SEMICOLON,node);
+            match(SEMICOLON,node," ;\n");
         }
     }
 
     void Expr(Node *node){
         if(token == tokens.end()) return;
         if( ct == NOT){
-            match(NOT,node);
+            match(NOT,node," not ");
             Expr(tree->insert("<Expr>",node));
             _Expr(tree->insert("<Expr'>",node));
         }
@@ -364,12 +370,12 @@ public:
     void _Expr3(Node* node){
         if(token == tokens.end()) return;
         if(ct == PLUS ){
-            match(PLUS,node);
+            match(PLUS,node, " + ");
             Term(tree->insert("<Term>",node));
             _Expr3(tree->insert("<Expr3'>",node));
         }
         else if(ct == MINUS){
-            match(MINUS,node);
+            match(MINUS,node," - ");
             Term(tree->insert("<Term>",node));
             _Expr3(tree->insert("<Expr3'>",node));
         }
@@ -387,7 +393,7 @@ public:
     void _Term(Node* node){
         if(token == tokens.end()) return;
         if( ct == TIMES || ct == DIVIDE || ct == DIV || ct == MOD ){
-            match(ct,node);
+            match(ct,node,(*token)->value);
             Factor(tree->insert("<Factor>",node));
             _Term(tree->insert("<Term'>",node));
         }
@@ -396,36 +402,39 @@ public:
     void Factor(Node* node){
         if(token == tokens.end()) return;
         if(ct == ID  ){
-            match(ct,node);
+            match(ct,node, (*token)->value);
         }
         else if( ct == V_STRING || ct== V_REAL || ct == V_INTEGER ){
             Value(tree->insert("<Value>",node));
         }
         else if( ct == OPEN_PAREN ){
-            match(OPEN_PAREN, node);
+            match(OPEN_PAREN, node,"( ");
             Expr(tree->insert("<Expr>",node));
-            match(CLOSE_PAREN,node);
+            match(CLOSE_PAREN,node," )");
         }
     }
 
     void RelOp(Node* node){
         if(token == tokens.end()) return;
         if(ct == EQ || ct == NE || ct == LT || ct == LE || ct == GE || ct == GT ){
-            match(ct,node);
+            match(ct,node,(*token)->value);
         }
     }
 
     void BooleanOp(Node* node){
         if(token == tokens.end()) return;
         if(ct == AND || ct == OR){
-            match(ct,node);
+            match(ct,node,(*token)->value);
         }
     }
 
     void Value(Node* node){
         if(token == tokens.end()) return;
-        if( ct == V_STRING || ct== V_REAL || ct == V_INTEGER){
-            match(ct,node);
+        if(ct == V_STRING ){
+            match(ct,node , "\""+(*token)->value+"\"");
+        }
+        else if(  ct== V_REAL || ct == V_INTEGER){
+            match(ct,node , (*token)->value);
         }
     }
 
@@ -460,7 +469,7 @@ int main(){
         return 0;
     }
 
-    p.tree->print();
+//    p.tree->print();
 
 
 }
