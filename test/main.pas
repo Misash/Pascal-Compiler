@@ -1,4 +1,3 @@
-
 program Test4;
 var
 age : integer;
@@ -19,8 +18,3 @@ end;
 end;
 Write(age);
 end.
-
-
-
-
-

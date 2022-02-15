@@ -1,0 +1,27 @@
+
+.form-group{
+    margin: 30px;
+}
+
+body{
+    background-color: #21325E;
+}
+
+h1{
+    color: #F1D00A;
+    text-align: center;
+    font-size: 5rem;
+}
+
+label{
+    color: #F1D00A;
+    font-size: 2rem;
+}
+
+.bash{
+    background-color: black;
+    color: rgb(30, 255, 0);
+    border: none;
+    padding: 30px;
+}
+
