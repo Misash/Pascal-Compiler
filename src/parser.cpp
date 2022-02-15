@@ -80,11 +80,8 @@ public:
             string nameType = tag_value[token_type];
 
             CPPCode += code;
-
-
-            cout<<nameType<<" ";
-            if(ct == SEMICOLON) cout<<"\n";
-
+//            cout<<nameType<<" ";
+//            if(ct == SEMICOLON) cout<<"\n";
             tree->insert(nameType,parent);
             scanToken();
         }else{
@@ -111,7 +108,6 @@ public:
             ConstBlock(tree->insert("<ConstBlock>",node));
             VarBlock(tree->insert("<VarBlock>",node));
             MainCode(tree->insert("<MainCode>",node));
-            cout<<"\n\n\nFinal Code: \n\n"<<CPPCode<<"\n\n";
         }
 
     }
@@ -460,6 +456,8 @@ public:
 
 int main(){
 
+
+
     Parser p;
     p.parseTokens();
 
@@ -471,7 +469,11 @@ int main(){
         return 0;
     }
 
-//    p.tree->print();
+
+    std::ofstream outfile;
+    outfile.open("../test/code.js", std::ios::trunc);
+    outfile <<p.CPPCode;
+
 
 
 }
