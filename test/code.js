@@ -1,26 +1,9 @@
 
 
-var age ; 
+var counter ; 
 
-age = 0 ;
+for( var i = 1; i < 7 ; i++ ){
 
-if(age<1){
-
-console.log( "Age cannot be less than 1..." );
-
-age = 100 ;
+console.log( "for loop" );
 
 }
-else{
-
-if(age>=100){
-
-console.log( "Age cannot be equal or greater than 100..." );
-
-age = age - 20 - 30 ;
-
-}
-
-}
-
-console.log( age );

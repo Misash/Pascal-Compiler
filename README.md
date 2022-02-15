@@ -8,11 +8,12 @@ this compiler includes the following parts:
 
 - Scanner: Read the pascal code  and storage errors and tokens
 - Parser : Parse tokens into logical syntax components, returning a parse tree
+- backend: Translate pascal code to javascript
 
 
 ## Installation
 
-Install my-project with g++ >=9.3.0  and GNU Make >=4.2.1
+Install my-project with g++ >=9.3.0  and Node >=16.13.0
 
 It is recommended that you use Linux
 
@@ -20,7 +21,7 @@ Install dependencies :
 
 ```bash
 sudo apt install g++
-sudo apt-get install build-essential
+sudo apt install node.js
 
 ```
 
@@ -32,29 +33,10 @@ Clone the project
 
 ```bash
   git clone https://github.com/Misash/Pascal-Compiler.git 
-```
-
-Go to the project directory
-
-```bash
-  cd my-project
+  cd Pascal-Compiler
+  npm install
+  npm start
 ```
 
 
-Execute the Scanner  with g++
-
-```bash
-  cd scr/
-  g++ parser.cpp -o myprog && ./myprog
-```
-
-Execute the Scanner  with Makefile
-
-```bash
-  make run
-```
-
-Clean object code
-```bash
-  make clean
-```
+Compiler should be running on [localhost:3000](http://localhost:5000/).
