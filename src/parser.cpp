@@ -80,6 +80,8 @@ public:
             string nameType = tag_value[token_type];
 
             CPPCode += code;
+
+
             cout<<nameType<<" ";
             if(ct == SEMICOLON) cout<<"\n";
 
@@ -240,7 +242,7 @@ public:
         if(token == tokens.end()) return;
         if(ct == FOR){
             match(FOR,node,"\nfor( ");
-            match(ID,node,"int i");
+            match(ID,node,"var i");
             match(ASSIGN,node," = ");
             Value(tree->insert("<Value>",node));
             To(tree->insert("<To>",node));
